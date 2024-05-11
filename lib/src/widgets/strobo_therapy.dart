@@ -104,7 +104,7 @@ class StroboTherapyWidget extends ConsumerWidget {
                               controller.disableTorch, choreography1);
                         }
                       : null,
-                  child: const Text('Start Therapy'),
+                  child: const Text('Basic Therapy'),
                 ),
                 const SizedBox(width: 20),
                 ElevatedButton(
@@ -120,14 +120,16 @@ class StroboTherapyWidget extends ConsumerWidget {
                 ),
               ],
             ),
-            ElevatedButton(
-              onPressed: () {
-                final controller =
-                    ref.read(torchLightControllerProvider.notifier);
-                stopTherapy(ref, controller.disableTorch);
-              },
-              child: const Text('Stop Therapy'),
-            ),
+            remainingTime > 0
+                ? ElevatedButton(
+                    onPressed: () {
+                      final controller =
+                          ref.read(torchLightControllerProvider.notifier);
+                      stopTherapy(ref, controller.disableTorch);
+                    },
+                    child: const Text('Stop Therapy'),
+                  )
+                : const SizedBox(),
           ],
         ),
       ),
