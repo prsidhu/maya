@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:morpheus/src/providers/torch_light_controller.dart';
+import 'package:wakelock/wakelock.dart';
 
 final therapyTimerProvider = StateProvider<int>((ref) {
   return 0;
@@ -29,17 +30,23 @@ class StroboTherapyWidget extends ConsumerWidget {
 
   void startTherapy(WidgetRef ref, Function enableTorch, Function disableTorch,
       List<Map<String, int>> choreography) {
+    // Reset any ongoing therapy
+    stopTherapy(ref, disableTorch);
+    Wakelock.enable(); // Enable wakelock to keep the screen on
+
     final therapyTimer = ref.read(therapyTimerProvider.state);
     therapyTimer.state = choreography.fold(
         0, (previousValue, element) => previousValue + element['duration']!);
 
     int choreographyIndex = 0;
-    Map<String, int> currentStep = choreography1[choreographyIndex];
+    Map<String, int> currentStep = choreography[choreographyIndex];
     int currentStepTimeRemaining = currentStep['duration']!;
     int frequency = currentStep['frequency']!;
     int halfPeriod =
         (1000 ~/ (frequency * 2)); // Calculate half period in milliseconds
     bool isTorchOn = false;
+
+    int timerFirings = 0;
 
     _timer = Timer.periodic(Duration(milliseconds: halfPeriod), (timer) {
       if (isTorchOn) {
@@ -50,19 +57,25 @@ class StroboTherapyWidget extends ConsumerWidget {
         isTorchOn = true;
       }
 
-      currentStepTimeRemaining--;
-      therapyTimer.state--;
+      timerFirings++;
+
+      // Only decrement currentStepTimeRemaining and therapyTimer.state once per second
+      if (timerFirings >= frequency * 2) {
+        currentStepTimeRemaining--;
+        therapyTimer.state--;
+        timerFirings = 0;
+      }
 
       if (currentStepTimeRemaining <= 0) {
         choreographyIndex++;
-        if (choreographyIndex >= choreography.length) {
-          timer.cancel(); // Stop the timer if choreography is completed
-          therapyTimer.state = 0; // Reset the timer
-        } else {
+        if (choreographyIndex < choreography.length) {
           currentStep = choreography[choreographyIndex];
           currentStepTimeRemaining = currentStep['duration']!;
           frequency = currentStep['frequency']!;
           halfPeriod = (1000 ~/ (frequency * 2));
+          timerFirings = 0;
+        } else {
+          stopTherapy(ref, disableTorch);
         }
       }
     });
@@ -72,6 +85,7 @@ class StroboTherapyWidget extends ConsumerWidget {
     _timer?.cancel();
     disableTorch();
     ref.read(therapyTimerProvider.state).state = 0; // Reset the timer
+    Wakelock.disable(); // Disable wakelock
   }
 
   @override
