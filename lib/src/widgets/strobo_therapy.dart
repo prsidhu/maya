@@ -3,20 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:morpheus/src/models/choreo.dart';
 import 'package:morpheus/src/providers/audioFileProvider.dart';
-import 'package:morpheus/src/providers/choreo_provider.dart';
 import 'package:morpheus/src/providers/torch_light_controller.dart';
 import 'package:morpheus/src/widgets/audio_player.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:morpheus/src/providers/therapy_time_provider.dart';
 
-final therapyTimerProvider = StateProvider<int>((ref) {
-  return 0;
-});
-
-class StroboTherapyWidget extends ConsumerWidget {
+class StroboTherapyWidget extends ConsumerStatefulWidget {
   final Choreo choreography;
 
   StroboTherapyWidget({Key? key, required this.choreography}) : super(key: key);
 
+  @override
+  _StroboTherapyWidgetState createState() => _StroboTherapyWidgetState();
+}
+
+class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
   Timer? _timer;
 
   void startTherapy(
@@ -28,12 +29,13 @@ class StroboTherapyWidget extends ConsumerWidget {
     stopTherapy(ref, disableTorch);
     Wakelock.enable(); // Enable wakelock to keep the screen on
 
-    final therapyTimer = ref.read(therapyTimerProvider.state);
-    therapyTimer.state = choreography.sequence.fold(
-        0, (int previousValue, Sequence curr) => previousValue + curr.duration);
+    final TherapyTimeNotifier therapyTimer =
+        ref.read(therapyTimeProvider.notifier);
+    therapyTimer.set(widget.choreography.sequence.fold(0,
+        (int previousValue, Sequence curr) => previousValue + curr.duration));
 
     int choreographyIndex = 0;
-    Sequence currentStep = choreography.sequence[choreographyIndex];
+    Sequence currentStep = widget.choreography.sequence[choreographyIndex];
     int currentStepTimeRemaining = currentStep.duration;
     int frequency = currentStep.frequency;
     int halfPeriod =
@@ -56,14 +58,14 @@ class StroboTherapyWidget extends ConsumerWidget {
       // Only decrement currentStepTimeRemaining and therapyTimer.state once per second
       if (timerFirings >= frequency * 2) {
         currentStepTimeRemaining--;
-        therapyTimer.state--;
+        therapyTimer.decrement();
         timerFirings = 0;
       }
 
       if (currentStepTimeRemaining <= 0) {
         choreographyIndex++;
-        if (choreographyIndex < choreography.sequence.length) {
-          currentStep = choreography.sequence[choreographyIndex];
+        if (choreographyIndex < widget.choreography.sequence.length) {
+          currentStep = widget.choreography.sequence[choreographyIndex];
           currentStepTimeRemaining = currentStep.duration;
           frequency = currentStep.frequency;
           halfPeriod = (1000 ~/ (frequency * 2));
@@ -78,14 +80,26 @@ class StroboTherapyWidget extends ConsumerWidget {
   void stopTherapy(WidgetRef ref, Function disableTorch) {
     _timer?.cancel();
     disableTorch();
-    ref.read(therapyTimerProvider.state).state = 0; // Reset the timer
+    ref.read(therapyTimeProvider.notifier).reset(); // Reset the timer
     Wakelock.disable(); // Disable wakelock
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    Wakelock.disable();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final torchLightState = ref.watch(torchLightControllerProvider);
-    final remainingTime = ref.watch(therapyTimerProvider);
+    final remainingTime = ref.watch(therapyTimeProvider);
 
     if (!torchLightState.isAvailable) {
       return const Center(
@@ -94,7 +108,7 @@ class StroboTherapyWidget extends ConsumerWidget {
     }
 
     final audioFileAsyncValue =
-        ref.watch(audioFileProvider(choreography.mediaName ?? ""));
+        ref.watch(audioFileProvider(widget.choreography.mediaName ?? ""));
 
     return audioFileAsyncValue.when(
         loading: () => const CircularProgressIndicator(),
@@ -112,12 +126,14 @@ class StroboTherapyWidget extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
-                      final controller =
-                          ref.read(torchLightControllerProvider.notifier);
-                      startTherapy(
-                          ref, controller.enableTorch, controller.disableTorch);
-                    },
+                    onPressed: remainingTime == 0
+                        ? () {
+                            final controller =
+                                ref.read(torchLightControllerProvider.notifier);
+                            startTherapy(ref, controller.enableTorch,
+                                controller.disableTorch);
+                          }
+                        : null,
                     child: const Icon(Icons.play_arrow),
                   ),
                   const SizedBox(
@@ -137,7 +153,7 @@ class StroboTherapyWidget extends ConsumerWidget {
               if (url.isNotEmpty)
                 AudioPlayerWidget(
                     filePath: url,
-                    isPlaying: ref.watch(therapyTimerProvider) != 0)
+                    isPlaying: ref.watch(therapyTimeProvider) != 0)
             ],
           );
         });

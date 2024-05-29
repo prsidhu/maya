@@ -2,7 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:torch_light/torch_light.dart';
 
 final torchLightControllerProvider =
-    StateNotifierProvider<TorchLightController, TorchLightState>((ref) {
+    StateNotifierProvider.autoDispose<TorchLightController, TorchLightState>(
+        (ref) {
   return TorchLightController();
 });
 
@@ -59,5 +60,11 @@ class TorchLightController extends StateNotifier<TorchLightState> {
     }
     state = TorchLightState(
         isAvailable: state.isAvailable, isTorchOn: !state.isTorchOn);
+  }
+
+  @override
+  void dispose() {
+    disableTorch();
+    super.dispose();
   }
 }
