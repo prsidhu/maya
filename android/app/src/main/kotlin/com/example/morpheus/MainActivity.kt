@@ -1,4 +1,4 @@
-package com.example.morpheus
+package com.morpheus.yume
 
 import io.flutter.embedding.android.FlutterActivity
 

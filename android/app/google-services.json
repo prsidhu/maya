@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1034642639369",
+    "project_id": "yume-fa6f1",
+    "storage_bucket": "yume-fa6f1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1034642639369:android:342b7db399a36d8cdb86d8",
+        "android_client_info": {
+          "package_name": "com.morpheus.yume"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMGEDWJBzlmNuGWloRPJlpI0ZseCyn-k8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
