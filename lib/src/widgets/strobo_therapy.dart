@@ -19,62 +19,87 @@ class StroboTherapyWidget extends ConsumerStatefulWidget {
 
 class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
   Timer? _timer;
+  bool isTorchOn = false;
+  int timerFirings = 0;
 
   void startTherapy(
       WidgetRef ref, Function enableTorch, Function disableTorch) {
     // Reset any ongoing therapy
-    stopTherapy(ref, disableTorch);
+    stopTherapy(disableTorch);
     Wakelock.enable(); // Enable wakelock to keep the screen on
 
     final TherapyTimeNotifier therapyTimer =
-        ref.read(therapyTimeProvider.notifier);
+        ref.watch(therapyTimeProvider.notifier);
     int totalDuration = calculateTotalDuration(widget.choreography.sequence);
-    therapyTimer.set(totalDuration);
+    therapyTimer.state = totalDuration;
 
     int choreographyIndex = 0;
-    int timerFirings = 0;
 
-    void updateTherapy() {
-      final Sequence currentStep =
-          widget.choreography.sequence[choreographyIndex];
-      int currentStepTimeRemaining = currentStep.duration;
-      int frequency = currentStep.frequency;
-      int halfPeriod = calculateHalfPeriod(frequency);
-      bool isTorchOn = false;
-
-      _timer = Timer.periodic(Duration(milliseconds: halfPeriod), (timer) {
-        toggleTorchState(enableTorch, disableTorch, ref, isTorchOn);
-        isTorchOn = !isTorchOn;
-
-        timerFirings++;
-        if (timerFirings >= frequency * 2) {
-          currentStepTimeRemaining--;
-          therapyTimer.decrement();
-          timerFirings = 0;
-        }
-
-        if (currentStepTimeRemaining <= 0) {
-          choreographyIndex++;
-          if (choreographyIndex < widget.choreography.sequence.length) {
-            _timer?.cancel();
-            updateTherapy();
-          } else {
-            stopTherapy(ref, disableTorch);
-          }
-        }
-      });
-    }
-
-    updateTherapy();
+    _startStep(
+      ref: ref,
+      enableTorch: enableTorch,
+      disableTorch: disableTorch,
+      choreographyIndex: choreographyIndex,
+    );
   }
 
-  void toggleTorchState(Function enableTorch, Function disableTorch,
-      WidgetRef ref, bool isTorchOn) {
+  void _startStep({
+    required WidgetRef ref,
+    required Function enableTorch,
+    required Function disableTorch,
+    required int choreographyIndex,
+  }) {
+    if (choreographyIndex >= widget.choreography.sequence.length) {
+      stopTherapy(disableTorch);
+      return;
+    }
+
+    final Sequence currentStep =
+        widget.choreography.sequence[choreographyIndex];
+    int currentStepTimeRemaining = currentStep.duration;
+    int frequency = currentStep.frequency;
+    int halfPeriod = calculateHalfPeriod(frequency);
+
+    _timer = Timer.periodic(Duration(milliseconds: halfPeriod), (timer) {
+      // Throttle the enable/disable events to avoid overloading the torch
+      if (frequency <= 10 || timerFirings % (frequency ~/ 10) == 0) {
+        toggleTorchState(enableTorch, disableTorch);
+      }
+
+      timerFirings++;
+
+      if (timerFirings >= frequency * 2) {
+        currentStepTimeRemaining--;
+        timerFirings = 0;
+        ref.read(therapyTimeProvider.notifier).decrement();
+      }
+
+      if (currentStepTimeRemaining <= 0) {
+        _timer?.cancel();
+        _startStep(
+          ref: ref,
+          enableTorch: enableTorch,
+          disableTorch: disableTorch,
+          choreographyIndex: choreographyIndex + 1,
+        );
+      }
+    });
+  }
+
+  void toggleTorchState(Function enableTorch, Function disableTorch) {
     if (isTorchOn) {
       disableTorch();
     } else {
       enableTorch();
     }
+    isTorchOn = !isTorchOn;
+  }
+
+  void stopTherapy(Function disableTorch) {
+    _timer?.cancel();
+    disableTorch();
+    ref.read(therapyTimeProvider.notifier).reset(); // Reset the timer
+    Wakelock.disable(); // Allow the screen to turn off
   }
 
   int calculateTotalDuration(List<Sequence> sequence) {
@@ -84,13 +109,6 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
 
   int calculateHalfPeriod(int frequency) {
     return (1000 ~/ (frequency * 2)); // Calculate half period in milliseconds
-  }
-
-  void stopTherapy(WidgetRef ref, Function disableTorch) {
-    _timer?.cancel();
-    disableTorch();
-    ref.read(therapyTimeProvider.notifier).reset(); // Reset the timer
-    Wakelock.disable(); // Disable wakelock
   }
 
   @override
@@ -152,7 +170,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                         ? () {
                             final controller =
                                 ref.read(torchLightControllerProvider.notifier);
-                            stopTherapy(ref, controller.disableTorch);
+                            stopTherapy(controller.disableTorch);
                           }
                         : null,
                     child: const Icon(Icons.stop),
