@@ -21,60 +21,69 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
   Timer? _timer;
 
   void startTherapy(
-    WidgetRef ref,
-    Function enableTorch,
-    Function disableTorch,
-  ) {
+      WidgetRef ref, Function enableTorch, Function disableTorch) {
     // Reset any ongoing therapy
     stopTherapy(ref, disableTorch);
     Wakelock.enable(); // Enable wakelock to keep the screen on
 
     final TherapyTimeNotifier therapyTimer =
         ref.read(therapyTimeProvider.notifier);
-    therapyTimer.set(widget.choreography.sequence.fold(0,
-        (int previousValue, Sequence curr) => previousValue + curr.duration));
+    int totalDuration = calculateTotalDuration(widget.choreography.sequence);
+    therapyTimer.set(totalDuration);
 
     int choreographyIndex = 0;
-    Sequence currentStep = widget.choreography.sequence[choreographyIndex];
-    int currentStepTimeRemaining = currentStep.duration;
-    int frequency = currentStep.frequency;
-    int halfPeriod =
-        (1000 ~/ (frequency * 2)); // Calculate half period in milliseconds
-    bool isTorchOn = false;
-
     int timerFirings = 0;
 
-    _timer = Timer.periodic(Duration(milliseconds: halfPeriod), (timer) {
-      if (isTorchOn) {
-        disableTorch();
-        isTorchOn = false;
-      } else {
-        enableTorch();
-        isTorchOn = true;
-      }
+    void updateTherapy() {
+      final Sequence currentStep =
+          widget.choreography.sequence[choreographyIndex];
+      int currentStepTimeRemaining = currentStep.duration;
+      int frequency = currentStep.frequency;
+      int halfPeriod = calculateHalfPeriod(frequency);
+      bool isTorchOn = false;
 
-      timerFirings++;
+      _timer = Timer.periodic(Duration(milliseconds: halfPeriod), (timer) {
+        toggleTorchState(enableTorch, disableTorch, ref, isTorchOn);
+        isTorchOn = !isTorchOn;
 
-      // Only decrement currentStepTimeRemaining and therapyTimer.state once per second
-      if (timerFirings >= frequency * 2) {
-        currentStepTimeRemaining--;
-        therapyTimer.decrement();
-        timerFirings = 0;
-      }
-
-      if (currentStepTimeRemaining <= 0) {
-        choreographyIndex++;
-        if (choreographyIndex < widget.choreography.sequence.length) {
-          currentStep = widget.choreography.sequence[choreographyIndex];
-          currentStepTimeRemaining = currentStep.duration;
-          frequency = currentStep.frequency;
-          halfPeriod = (1000 ~/ (frequency * 2));
+        timerFirings++;
+        if (timerFirings >= frequency * 2) {
+          currentStepTimeRemaining--;
+          therapyTimer.decrement();
           timerFirings = 0;
-        } else {
-          stopTherapy(ref, disableTorch);
         }
-      }
-    });
+
+        if (currentStepTimeRemaining <= 0) {
+          choreographyIndex++;
+          if (choreographyIndex < widget.choreography.sequence.length) {
+            _timer?.cancel();
+            updateTherapy();
+          } else {
+            stopTherapy(ref, disableTorch);
+          }
+        }
+      });
+    }
+
+    updateTherapy();
+  }
+
+  void toggleTorchState(Function enableTorch, Function disableTorch,
+      WidgetRef ref, bool isTorchOn) {
+    if (isTorchOn) {
+      disableTorch();
+    } else {
+      enableTorch();
+    }
+  }
+
+  int calculateTotalDuration(List<Sequence> sequence) {
+    return sequence.fold(
+        0, (int previousValue, Sequence curr) => previousValue + curr.duration);
+  }
+
+  int calculateHalfPeriod(int frequency) {
+    return (1000 ~/ (frequency * 2)); // Calculate half period in milliseconds
   }
 
   void stopTherapy(WidgetRef ref, Function disableTorch) {
