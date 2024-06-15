@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:morpheus/src/models/choreo.dart';
 import 'package:morpheus/src/providers/audioFileProvider.dart';
 import 'package:morpheus/src/providers/countdown.dart';
 import 'package:morpheus/src/providers/torch_light_controller.dart';
+import 'package:morpheus/src/utils/stringUtils.dart';
 import 'package:morpheus/src/widgets/audio_player.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:morpheus/src/providers/therapy_time_provider.dart';
@@ -23,11 +23,12 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
   Timer? _timer;
   bool isTorchOn = false;
   int timerFirings = 0;
+  bool isPlaying = false;
 
-  void startTherapy(
-      WidgetRef ref, Function enableTorch, Function disableTorch) async {
+  void startTherapy() async {
+    print("start");
     // Reset any ongoing therapy
-    stopTherapy(disableTorch);
+    stopTherapy();
     Wakelock.enable(); // Enable wakelock to keep the screen on
 
     final TherapyTimeNotifier therapyTimer =
@@ -48,15 +49,16 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
 
     // Wait for the countdown to finish
     while (countdown.state > 0) {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
     }
 
     int choreographyIndex = 0;
-
+    isPlaying = true;
     _startStep(
       ref: ref,
-      enableTorch: enableTorch,
-      disableTorch: disableTorch,
+      enableTorch: ref.read(torchLightControllerProvider.notifier).enableTorch,
+      disableTorch:
+          ref.read(torchLightControllerProvider.notifier).disableTorch,
       choreographyIndex: choreographyIndex,
     );
   }
@@ -68,7 +70,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
     required int choreographyIndex,
   }) {
     if (choreographyIndex >= widget.choreography.sequence.length) {
-      stopTherapy(disableTorch);
+      stopTherapy();
       return;
     }
 
@@ -113,11 +115,14 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
     isTorchOn = !isTorchOn;
   }
 
-  void stopTherapy(Function disableTorch) {
+  void stopTherapy() {
+    print("stop");
     _timer?.cancel();
-    disableTorch();
-    ref.read(therapyTimeProvider.notifier).reset(); // Reset the timer
+    ref.read(torchLightControllerProvider.notifier).disableTorch();
+    ref.read(therapyTimeProvider.notifier).state =
+        calculateTotalDuration(widget.choreography.sequence); // Reset the timer
     ref.read(countdownProvider.notifier).reset(); // Reset the countdown
+    isPlaying = false;
     Wakelock.disable(); // Allow the screen to turn off
   }
 
@@ -132,7 +137,19 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
 
   @override
   void initState() {
-    super.initState();
+    super.initState(); // Call super.initState() first.
+    Future.delayed(Duration.zero, () {
+      final TherapyTimeNotifier therapyTimer = ref.read(
+          therapyTimeProvider.notifier); // Use ref.read for initialization.
+      try {
+        int totalDuration =
+            calculateTotalDuration(widget.choreography.sequence);
+        therapyTimer.state = totalDuration;
+      } catch (e) {
+        // Handle or log the error as needed
+        print("Error initializing therapy timer: $e");
+      }
+    });
   }
 
   @override
@@ -157,6 +174,8 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
     final audioFileAsyncValue =
         ref.watch(audioFileProvider(widget.choreography.mediaName ?? ""));
 
+    print('countdown: $countdown');
+
     return audioFileAsyncValue.when(
         loading: () => const Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -170,48 +189,51 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  countdown > 0
-                      ? 'Therapy will start in: $countdown seconds'
-                      : '',
-                  style: const TextStyle(color: Colors.black, fontSize: 18),
-                ),
-                Text(
-                  remainingTime > 0 && countdown == 0
-                      ? 'Time Remaining: ${remainingTime}s'
-                      : '',
-                  style: const TextStyle(color: Colors.black, fontSize: 14),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: remainingTime == 0
-                          ? () {
-                              final controller = ref
-                                  .read(torchLightControllerProvider.notifier);
-                              startTherapy(ref, controller.enableTorch,
-                                  controller.disableTorch);
-                            }
-                          : null,
-                      child: const Icon(Icons.play_arrow),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 50.0),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      countdown > 0 ? '$countdown' : '',
+                      style: Theme.of(context).textTheme.displayMedium,
                     ),
-                    const SizedBox(
-                        width: 20), // Add some space between the buttons
-                    ElevatedButton(
-                      onPressed: remainingTime > 0
-                          ? () {
-                              final controller = ref
-                                  .read(torchLightControllerProvider.notifier);
-                              stopTherapy(controller.disableTorch);
-                            }
-                          : null,
-                      child: const Icon(Icons.stop),
-                    )
-                  ],
+                  ),
                 ),
+                Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Text(
+                      widget.choreography.title,
+                      style: Theme.of(context).textTheme.headlineLarge,
+                    )),
+                Text(
+                    'Media Name: ${widget.choreography.mediaName ?? 'Media unavailable'}'),
+                Padding(
+                    padding: const EdgeInsets.only(top: 50.0, bottom: 40.0),
+                    child: Center(
+                      child: FloatingActionButton.extended(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        onPressed: countdown > 0
+                            ? null
+                            : () {
+                                isPlaying ? stopTherapy() : startTherapy();
+                              },
+                        label: Text(
+                          countdownFormatDuration(remainingTime),
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                        icon: Icon(
+                          countdown > 0
+                              ? Icons.more_horiz
+                              : isPlaying
+                                  ? Icons.stop
+                                  : Icons.play_arrow,
+                          size: 40.0,
+                        ),
+                        shape: const StadiumBorder(),
+                      ),
+                    )),
                 if (url.isNotEmpty)
                   AudioPlayerWidget(
                       filePath: url,
