@@ -3,12 +3,14 @@ class Choreo {
   final String title;
   final List<Sequence> sequence;
   final String? mediaName;
+  final int? totalDuration;
 
   Choreo(
       {required this.id,
       required this.title,
       required this.sequence,
-      this.mediaName = ''});
+      this.mediaName = '',
+      this.totalDuration = 0});
 
   Choreo.fromMap(Map<String, dynamic> data, this.id)
       : title = data['title'],
@@ -18,7 +20,11 @@ class Choreo {
                   duration: e['duration'],
                   frequency: e['frequency'],
                 ))
-            .toList();
+            .toList(),
+        totalDuration = (data['sequence'] as List).fold(
+            0,
+            (prev, element) =>
+                (prev! + (element['duration'] ?? 0).toInt()).toInt());
 }
 
 class Sequence {
