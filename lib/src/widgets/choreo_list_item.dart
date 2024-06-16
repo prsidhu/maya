@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:morpheus/src/models/choreo.dart';
+import 'package:morpheus/src/utils/stringUtils.dart';
 import 'package:morpheus/src/widgets/choreo_image.dart';
 
 class ChoreoListItem extends ConsumerWidget {
@@ -48,12 +49,23 @@ class ChoreoListItem extends ConsumerWidget {
                       Text(
                         choreo.title,
                         style: Theme.of(context).textTheme.headlineSmall,
-                        // Ensure the rest of your widget code follows here
                       ),
+                      const SizedBox(
+                        height: 6.0,
+                      ),
+                      Text(formatDuration(choreo.totalDuration ?? 0),
+                          style: Theme.of(context).textTheme.bodySmall)
                     ],
                   ),
                 ),
               ),
+              Padding(
+                  padding: const EdgeInsets.only(
+                      left: 8.0, right: 16.0, top: 8.0, bottom: 8.0),
+                  child:
+                      choreo.mediaName != null && choreo.mediaName!.isNotEmpty
+                          ? const Icon(Icons.music_note)
+                          : const SizedBox.shrink())
             ],
           ),
         ),

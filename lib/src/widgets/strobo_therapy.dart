@@ -233,9 +233,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                       ),
                     )),
                 if (url.isNotEmpty)
-                  AudioPlayerWidget(
-                      filePath: url,
-                      isPlaying: ref.watch(therapyTimeProvider) != 0)
+                  AudioPlayerWidget(filePath: url, isPlaying: isPlaying)
               ],
             ),
           );
