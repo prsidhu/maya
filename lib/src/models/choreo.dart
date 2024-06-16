@@ -3,6 +3,7 @@ class Choreo {
   final String title;
   final List<Sequence> sequence;
   final String? mediaName;
+  final String? imageName;
   final int? totalDuration;
 
   Choreo(
@@ -10,11 +11,13 @@ class Choreo {
       required this.title,
       required this.sequence,
       this.mediaName = '',
+      this.imageName = '',
       this.totalDuration = 0});
 
   Choreo.fromMap(Map<String, dynamic> data, this.id)
       : title = data['title'],
         mediaName = data['media_name'],
+        imageName = data['image_name'],
         sequence = (data['sequence'] as List)
             .map((e) => Sequence(
                   duration: e['duration'],

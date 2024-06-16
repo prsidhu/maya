@@ -174,8 +174,6 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
     final audioFileAsyncValue =
         ref.watch(audioFileProvider(widget.choreography.mediaName ?? ""));
 
-    print('countdown: $countdown');
-
     return audioFileAsyncValue.when(
         loading: () => const Column(
               mainAxisAlignment: MainAxisAlignment.center,

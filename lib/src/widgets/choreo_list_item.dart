@@ -1,47 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:morpheus/src/utils/stringUtils.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:morpheus/src/models/choreo.dart';
+import 'package:morpheus/src/widgets/choreo_image.dart';
 
-class ChoreoListItem extends StatelessWidget {
-  final String title;
-  final int totalDuration;
-  final bool hasMusic;
-  final VoidCallback onTap;
+class ChoreoListItem extends ConsumerWidget {
+  final Choreo choreo;
+  final onTap;
 
-  const ChoreoListItem({
-    Key? key,
-    required this.title,
-    required this.totalDuration,
-    required this.hasMusic,
-    required this.onTap,
-  }) : super(key: key);
+  ChoreoListItem({Key? key, required this.choreo, required this.onTap})
+      : super(key: key);
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Padding(
-  //     padding: const EdgeInsets.all(8.0), // Apply padding around the Container
-  //     child: Container(
-  //       decoration: BoxDecoration(
-  //         color: Theme.of(context)
-  //             .colorScheme
-  //             .surfaceDim, // Set the background color of the Container
-  //         borderRadius: BorderRadius.circular(10.0), // Set rounded corners
-  //       ),
-  //       child: ListTile(
-  //         leading: Image.asset('assets/images/sleep.webp'),
-  //         onTap: onTap,
-  //         subtitle: Text(formatDuration(totalDuration)),
-  //         title: Text(title),
-  //         trailing: hasMusic ? const Icon(Icons.music_note) : null,
-  //       ),
-  //     ),
-  //   );
-  // }
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        height: 100, // Optional: Define a fixed height for consistency
+        height: 100, // Define a fixed height for consistency
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surfaceDim,
           borderRadius: BorderRadius.circular(10.0),
@@ -54,9 +28,12 @@ class ChoreoListItem extends StatelessWidget {
                 borderRadius: const BorderRadiusDirectional.only(
                     topStart: Radius.circular(10.0),
                     bottomStart: Radius.circular(10.0)),
-                child: Image.asset(
-                  'assets/images/sleep.webp',
-                  fit: BoxFit.fill,
+                child: Image(
+                  width: 100, // Define a width for the image
+                  height:
+                      100, // Use the same height as the container to fill the space
+                  fit: BoxFit.cover,
+                  image: ChoreoImageProvider.getImageProvider(choreo, ref),
                 ),
               ),
               const SizedBox(width: 10),
@@ -69,26 +46,13 @@ class ChoreoListItem extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        title,
+                        choreo.title,
                         style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                      const SizedBox(
-                        height: 6.0,
-                      ),
-                      Text(
-                        formatDuration(totalDuration),
-                        style: Theme.of(context).textTheme.bodySmall,
+                        // Ensure the rest of your widget code follows here
                       ),
                     ],
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 8.0, right: 16.0, top: 8.0, bottom: 8.0),
-                child: hasMusic
-                    ? const Icon(Icons.music_note)
-                    : const SizedBox.shrink(),
               ),
             ],
           ),

@@ -5,12 +5,21 @@ import 'dart:convert';
 import 'package:morpheus/src/config/constants.dart';
 import 'package:morpheus/src/models/signedUrl.dart';
 
+class SignedUrlRequest {
+  final String fileName;
+  final bool isImage;
+
+  SignedUrlRequest({required this.fileName, required this.isImage});
+}
+
 final signedUrlProvider =
-    FutureProvider.family<SignedUrl, String>((ref, fileName) async {
+    FutureProvider.family<SignedUrl, SignedUrlRequest>((ref, request) async {
   try {
-    print('url: ${Constants.signedUrlEndpoint(fileName)}');
-    final response =
-        await http.get(Uri.parse(Constants.signedUrlEndpoint(fileName)));
+    String url = request.isImage
+        ? Constants.imageUrl(request.fileName)
+        : Constants.signedUrlEndpoint(request.fileName);
+    print('url: $url');
+    final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       return SignedUrl(

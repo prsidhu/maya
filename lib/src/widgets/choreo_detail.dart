@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:morpheus/src/models/choreo.dart';
 import 'package:morpheus/src/providers/torch_light_controller.dart';
 import 'package:morpheus/src/utils/stringUtils.dart';
+import 'package:morpheus/src/widgets/choreo_image.dart';
 import 'package:morpheus/src/widgets/strobo_therapy.dart';
 
 class ChoreoDetailsScreen extends ConsumerStatefulWidget {
@@ -43,11 +44,11 @@ class _ChoreoDetailsScreenState extends ConsumerState<ChoreoDetailsScreen> {
               Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: const AssetImage(
-                        'assets/images/sleep.webp'), // Specify your image path
+                    image: ChoreoImageProvider.getImageProvider(
+                        widget.choreo, ref), // Corrected to widget.choreo
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.7), // Dark overlay
+                      Colors.black.withOpacity(0.7),
                       BlendMode.darken,
                     ),
                   ),

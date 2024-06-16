@@ -4,4 +4,7 @@ class Constants {
 
   static String signedUrlEndpoint(String fileName) =>
       '${baseUrl}signed-url?fileName=$fileName';
+
+  static String imageUrl(String fileName) =>
+      '${baseUrl}image?fileName=$fileName';
 }

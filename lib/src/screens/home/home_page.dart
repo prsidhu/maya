@@ -37,10 +37,7 @@ class HomePage extends ConsumerWidget {
                   (BuildContext context, int index) {
                     final Choreo choreo = choreos[index];
                     return ChoreoListItem(
-                      hasMusic: choreo.mediaName != null &&
-                          choreo.mediaName!.isNotEmpty,
-                      title: choreo.title,
-                      totalDuration: choreo.totalDuration ?? 0,
+                      choreo: choreo,
                       onTap: () {
                         // ref.read(currentChoreoProvider).state = choreo;
                         Navigator.push(
