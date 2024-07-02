@@ -12,7 +12,20 @@
           "package_name": "com.morpheus.yume"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1034642639369-0bg5me4nhpsssmk2dlm3ref666b68cv1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.morpheus.yume",
+            "certificate_hash": "dbf25f55dde09b3777004579a976ab8dd88d751a"
+          }
+        },
+        {
+          "client_id": "1034642639369-bb6j3nakhsdjo5vo7j408m3pvb3sgprc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDMGEDWJBzlmNuGWloRPJlpI0ZseCyn-k8"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1034642639369-bb6j3nakhsdjo5vo7j408m3pvb3sgprc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1034642639369-f8snt2ar45oq1m1ls9n7o83ijohipddg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.morpheus.yume"
+              }
+            }
+          ]
         }
       }
     }

@@ -8,8 +8,8 @@ final ThemeData darkTheme = ThemeData(
     primary: Color(0xFFFF9800), // Primary Orange Color
     secondary: Color(0xFFF27B13), // This is the new way to set accent color
     tertiary: Color(0xFFF2E0C9),
-    background: Color(0xFF1E1D26), // Background Color
-    surface: Color(0xFF1E1D26), // Background Highlight Color
+    background: Color.fromARGB(255, 48, 46, 62), // Background Color
+    surface: Color.fromARGB(255, 48, 46, 62), // Background Highlight Color
     surfaceDim: Color.fromARGB(255, 72, 69, 69),
     onPrimary: Color(0xFFFFFFFF), // Text/icon color on primary color
     onSecondary: Color(0xFFFFFFFF), // Text/icon color on secondary color
