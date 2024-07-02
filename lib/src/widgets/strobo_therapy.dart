@@ -167,7 +167,10 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
 
     if (!torchLightState.isAvailable) {
       return const Center(
-        child: Text('Torch light is not available on this device.'),
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 40.0),
+          child: Text('Torch light is not available on this device.'),
+        ),
       );
     }
 

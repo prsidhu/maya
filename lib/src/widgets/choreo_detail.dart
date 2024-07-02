@@ -63,8 +63,11 @@ class _ChoreoDetailsScreenState extends ConsumerState<ChoreoDetailsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (!torchLightState.isAvailable)
-                        const Text(
-                          'Torch light is not available on this device.',
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 40.0),
+                          child: Text(
+                            'Torch light is not available on this device.',
+                          ),
                         ),
                       if (torchLightState.isAvailable) ...[
                         StroboTherapyWidget(
