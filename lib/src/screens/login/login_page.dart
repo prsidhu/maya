@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:morpheus/src/utils/auth.dart';
 import 'package:morpheus/src/widgets/password_field.dart';
 import 'package:morpheus/src/widgets/text_field.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -87,6 +88,24 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  Future<void> signInWithGoogle() async {
+    final GoogleSignIn _googleSignIn = GoogleSignIn();
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser!.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      await FirebaseAuth.instance.signInWithCredential(credential);
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        _errorMessage = e.message;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -149,6 +168,28 @@ class _LoginPageState extends State<LoginPage> {
               },
               child: Text(
                   isLogin ? 'Create an account' : 'Already have an account?'),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: ElevatedButton.icon(
+                icon: const Icon(
+                  FontAwesomeIcons
+                      .google, // Using FontAwesomeIcons for Google icon
+                  color: Colors.white, // Icon color
+                ),
+                label: const Text(''), // No text, as you want only the icon
+                onPressed: () {
+                  signInWithGoogle();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      Colors.red, // Background color - Google's red
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(20.0), // Rounded corners
+                  ),
+                ),
+              ),
             ),
           ],
         ),
