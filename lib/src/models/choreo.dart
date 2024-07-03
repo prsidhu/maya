@@ -2,6 +2,7 @@ class Choreo {
   final String id;
   final String title;
   final List<Sequence> sequence;
+  final List<String> segments;
   final String? mediaName;
   final String? imageName;
   final int? totalDuration;
@@ -10,6 +11,7 @@ class Choreo {
       {required this.id,
       required this.title,
       required this.sequence,
+      required this.segments,
       this.mediaName = '',
       this.imageName = '',
       this.totalDuration = 0});
@@ -18,6 +20,7 @@ class Choreo {
       : title = data['title'],
         mediaName = data['media_name'],
         imageName = data['image_name'],
+        segments = (data['segments'] as List).map((e) => e.toString()).toList(),
         sequence = (data['sequence'] as List)
             .map((e) => Sequence(
                   duration: e['duration'],
