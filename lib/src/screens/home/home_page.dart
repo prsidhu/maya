@@ -7,14 +7,38 @@ import 'package:morpheus/src/providers/goal_segment_provider.dart';
 import 'package:morpheus/src/widgets/choreo_detail.dart';
 import 'package:morpheus/src/widgets/choreo_list_item.dart';
 import 'package:morpheus/src/widgets/goalSegment/goal_segment_widget.dart';
+import 'package:morpheus/src/widgets/text/primary_title.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends ConsumerState<HomePage> {
+class _HomePageState extends ConsumerState<HomePage>
+    with SingleTickerProviderStateMixin {
   GoalSegment? selectedGoalSegment;
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+  bool _animationTriggered = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    _animation = Tween(begin: 0.0, end: -1.0).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,29 +46,50 @@ class _HomePageState extends ConsumerState<HomePage> {
     final GoalSegment? selected = ref.watch(goalSegmentProvider);
 
     if (selected != null && selected != selectedGoalSegment) {
-      selectedGoalSegment = selected;
+      setState(() {
+        selectedGoalSegment = selected;
+      });
+
+      if (!_animationTriggered) {
+        // Step 3: Conditionally trigger animation
+        _animationController.forward().then((value) {
+          if (mounted) {
+            _animationController.reset();
+            _animationTriggered =
+                true; // Step 2: Update the flag after animation
+          }
+        });
+      }
     }
 
     return Scaffold(
       appBar: AppBar(
-        leading: const Icon(Icons.flutter_dash), // Replace with your app's logo
-        title: const Text('Maya'), // Replace with your app's name
+        leading: const Icon(Icons.flutter_dash),
+        title: const Text('Maya'),
       ),
-      body: CustomScrollView(
-        slivers: <Widget>[
-          if (selectedGoalSegment != null)
-            SliverPersistentHeader(
-              delegate: _StickyGoalSegmentHeader(selectedGoalSegment!),
-              pinned: true,
-            ),
-          if (selectedGoalSegment == null)
-            const SliverFillRemaining(
-              child: Center(
-                child: GoalSegmentWidget(),
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 500),
+        child: selectedGoalSegment == null
+            ? const Center(child: GoalSegmentWidget())
+            : AnimatedBuilder(
+                animation: _animationController,
+                builder: (context, child) {
+                  return Transform.translate(
+                    offset: Offset(0.0, _animation.value * 200),
+                    child: child,
+                  );
+                },
+                child: CustomScrollView(
+                  key: ValueKey(selectedGoalSegment),
+                  slivers: <Widget>[
+                    SliverPersistentHeader(
+                      delegate: _StickyGoalSegmentHeader(selectedGoalSegment!),
+                      pinned: true,
+                    ),
+                    ..._buildChoreoList(choreoAsyncValue),
+                  ],
+                ),
               ),
-            ),
-          ..._buildChoreoList(choreoAsyncValue),
-        ],
       ),
     );
   }
@@ -96,14 +141,26 @@ class _StickyGoalSegmentHeader extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return const GoalSegmentWidget(); // Adjust this widget as needed
+    return const Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GoalSegmentWidget(),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+          child: PrimaryTitle(
+            text: "Today's Therapies",
+          ),
+        ),
+      ],
+    );
   }
 
   @override
-  double get maxExtent => 200;
+  double get maxExtent => 198;
 
   @override
-  double get minExtent => 70;
+  double get minExtent => 198;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>

@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:morpheus/src/widgets/goalSegment/goal_segment_button.dart';
+import 'package:morpheus/src/widgets/text/primary_title.dart';
 
 class GoalSegmentWidget extends StatelessWidget {
   const GoalSegmentWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            child: Text(
-              'Choose your goal',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+            padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+            child: PrimaryTitle(
+              text: 'Choose your goal',
             ),
           ),
-          const GoalSegmentButton()
+          GoalSegmentButton()
         ]);
   }
 }
