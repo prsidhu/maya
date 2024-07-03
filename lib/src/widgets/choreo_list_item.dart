@@ -16,7 +16,7 @@ class ChoreoListItem extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        height: 100, // Define a fixed height for consistency
+        height: 90, // Define a fixed height for consistency
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surfaceDim,
           borderRadius: BorderRadius.circular(10.0),
@@ -48,24 +48,45 @@ class ChoreoListItem extends ConsumerWidget {
                     children: [
                       Text(
                         choreo.title,
-                        style: Theme.of(context).textTheme.headlineSmall,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
                       ),
                       const SizedBox(
                         height: 6.0,
                       ),
-                      Text(formatDuration(choreo.totalDuration ?? 0),
-                          style: Theme.of(context).textTheme.bodySmall)
+                      if (choreo.mediaName != null &&
+                          choreo.mediaName!.isNotEmpty) ...[
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.music_note,
+                              size: 12.0,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            Text(choreo.mediaName!,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary))
+                          ],
+                        ),
+                      ],
                     ],
                   ),
                 ),
               ),
               Padding(
-                  padding: const EdgeInsets.only(
-                      left: 8.0, right: 16.0, top: 8.0, bottom: 8.0),
-                  child:
-                      choreo.mediaName != null && choreo.mediaName!.isNotEmpty
-                          ? const Icon(Icons.music_note)
-                          : const SizedBox.shrink())
+                padding: const EdgeInsets.only(
+                    left: 8.0, right: 16.0, top: 8.0, bottom: 8.0),
+                child: Text(countdownFormatDuration(choreo.totalDuration ?? 0),
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.secondary)),
+              )
             ],
           ),
         ),
