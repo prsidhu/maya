@@ -34,7 +34,9 @@ class _ChoreoDetailsScreenState extends ConsumerState<ChoreoDetailsScreen> {
         child: Scaffold(
           extendBodyBehindAppBar: true,
           appBar: AppBar(
-            title: Text(widget.choreo.title),
+            title: Text(widget.choreo.title,
+                style: Theme.of(context).textTheme.headlineLarge),
+            centerTitle: false,
             backgroundColor:
                 Colors.transparent, // Makes the AppBar background transparent
             elevation: 0, // Removes shadow under the AppBar

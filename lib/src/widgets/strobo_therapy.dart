@@ -190,7 +190,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 50.0),
@@ -206,31 +206,69 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: Text(
                       widget.choreography.title,
-                      style: Theme.of(context).textTheme.headlineLarge,
+                      style:
+                          Theme.of(context).textTheme.headlineLarge?.copyWith(
+                                fontWeight: FontWeight.w500,
+                              ),
                     )),
-                Text(
-                    'Media Name: ${widget.choreography.mediaName ?? 'Media unavailable'}'),
+                if (widget.choreography.author != null &&
+                    widget.choreography.author!.isNotEmpty) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(
+                        'by ${capitalizeName(widget.choreography.author ?? '')}',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.primary,
+                            )),
+                  ),
+                ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.music_note,
+                          size: 16.0,
+                          color: Theme.of(context).colorScheme.primary),
+                      const SizedBox(width: 8.0),
+                      Text(
+                        widget.choreography.mediaName ?? 'Media unavailable',
+                        style:
+                            Theme.of(context).textTheme.labelMedium?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                      ),
+                    ],
+                  ),
+                ),
                 Padding(
                     padding: const EdgeInsets.only(top: 50.0, bottom: 40.0),
                     child: Center(
                       child: FloatingActionButton.extended(
-                        backgroundColor: Theme.of(context).primaryColor,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.onPrimary,
                         onPressed: countdown > 0
                             ? null
                             : () {
                                 isPlaying ? stopTherapy() : startTherapy();
                               },
                         label: Text(
-                          countdownFormatDuration(remainingTime),
-                          style: Theme.of(context).textTheme.labelLarge,
+                          '${isPlaying ? 'Stop' : 'Start'} / ${countdownFormatDuration(remainingTime)}',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(
+                                  color: const Color(0xFF222222),
+                                  fontWeight: FontWeight.bold),
                         ),
                         icon: Icon(
                           countdown > 0
                               ? Icons.more_horiz
                               : isPlaying
-                                  ? Icons.stop
-                                  : Icons.play_arrow,
-                          size: 40.0,
+                                  ? Icons.stop_outlined
+                                  : Icons.play_arrow_outlined,
+                          size: 32.0,
+                          color: const Color(0xFF222222),
                         ),
                         shape: const StadiumBorder(),
                       ),

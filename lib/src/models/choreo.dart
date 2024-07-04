@@ -6,6 +6,7 @@ class Choreo {
   final String? mediaName;
   final String? imageName;
   final int? totalDuration;
+  final String? author;
 
   Choreo(
       {required this.id,
@@ -14,10 +15,12 @@ class Choreo {
       required this.segments,
       this.mediaName = '',
       this.imageName = '',
-      this.totalDuration = 0});
+      this.totalDuration = 0,
+      this.author = ''});
 
   Choreo.fromMap(Map<String, dynamic> data, this.id)
-      : title = data['title'],
+      : author = data['author'] ?? '',
+        title = data['title'],
         mediaName = data['media_name'],
         imageName = data['image_name'],
         segments = (data['segments'] as List).map((e) => e.toString()).toList(),
