@@ -7,6 +7,7 @@ import 'package:morpheus/src/providers/goal_segment_provider.dart';
 import 'package:morpheus/src/widgets/choreo_detail.dart';
 import 'package:morpheus/src/widgets/choreo_list_item.dart';
 import 'package:morpheus/src/widgets/goalSegment/goal_segment_widget.dart';
+import 'package:morpheus/src/widgets/text/logo_text.dart';
 import 'package:morpheus/src/widgets/text/primary_title.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -64,9 +65,9 @@ class _HomePageState extends ConsumerState<HomePage>
 
     return Scaffold(
       appBar: AppBar(
-        leading: const Icon(Icons.flutter_dash),
-        title: const Text('Maya'),
-      ),
+          leading:
+              Image.asset('assets/images/maya_logo.png', fit: BoxFit.fitWidth),
+          title: const LogoText()),
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 500),
         child: selectedGoalSegment == null

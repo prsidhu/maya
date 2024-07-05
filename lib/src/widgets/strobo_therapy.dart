@@ -7,6 +7,7 @@ import 'package:morpheus/src/providers/countdown.dart';
 import 'package:morpheus/src/providers/torch_light_controller.dart';
 import 'package:morpheus/src/utils/stringUtils.dart';
 import 'package:morpheus/src/widgets/audio_player.dart';
+import 'package:morpheus/src/widgets/text/author_text.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:morpheus/src/providers/therapy_time_provider.dart';
 
@@ -26,7 +27,6 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
   bool isPlaying = false;
 
   void startTherapy() async {
-    print("start");
     // Reset any ongoing therapy
     stopTherapy();
     Wakelock.enable(); // Enable wakelock to keep the screen on
@@ -213,14 +213,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                     )),
                 if (widget.choreography.author != null &&
                     widget.choreography.author!.isNotEmpty) ...[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Text(
-                        'by ${capitalizeName(widget.choreography.author ?? '')}',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.primary,
-                            )),
-                  ),
+                  AuthorText(author: widget.choreography.author ?? '')
                 ],
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),

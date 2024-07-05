@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:morpheus/src/models/choreo.dart';
 import 'package:morpheus/src/utils/stringUtils.dart';
 import 'package:morpheus/src/widgets/choreo_image.dart';
+import 'package:morpheus/src/widgets/text/author_text.dart';
+import 'package:morpheus/src/widgets/text/media_text.dart';
 
 class ChoreoListItem extends ConsumerWidget {
   final Choreo choreo;
@@ -53,28 +55,18 @@ class ChoreoListItem extends ConsumerWidget {
                               color: Theme.of(context).colorScheme.onPrimary,
                             ),
                       ),
-                      const SizedBox(
-                        height: 6.0,
-                      ),
+                      if (choreo.author != null &&
+                          choreo.author!.isNotEmpty) ...[
+                        AuthorText(
+                          author: choreo.author!,
+                          padding: const EdgeInsets.only(
+                              bottom: 6.0, left: 2.0, top: 4.0),
+                          style: Theme.of(context).textTheme.labelSmall,
+                        ),
+                      ],
                       if (choreo.mediaName != null &&
                           choreo.mediaName!.isNotEmpty) ...[
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.music_note,
-                              size: 12.0,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            Text(choreo.mediaName!,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
-                                    ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary))
-                          ],
-                        ),
+                        MediaText(mediaName: choreo.mediaName ?? ''),
                       ],
                     ],
                   ),
