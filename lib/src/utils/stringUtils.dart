@@ -10,3 +10,12 @@ String countdownFormatDuration(int totalSeconds) {
   int seconds = totalSeconds % 60;
   return "${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
 }
+
+// Write a function that takes name as parameter and returns the name after capitalizing first letter of every word
+// Example: capitalizeName('john doe') => 'John Doe'
+String capitalizeName(String name) {
+  return name
+      .split(' ')
+      .map((word) => word[0].toUpperCase() + word.substring(1))
+      .join(' ');
+}

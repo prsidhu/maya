@@ -20,7 +20,6 @@ final audioFileProvider =
               SignedUrlRequest(fileName: fileName, isImage: false))
           .future);
       final String signedUrl = signedUrlAsyncValue.signedUrl;
-      print('Signed URL: $signedUrl');
       // Download the file locally
       final dio = Dio();
       await dio.download(signedUrl, filePath);

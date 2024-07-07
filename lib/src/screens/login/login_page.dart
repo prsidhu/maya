@@ -49,10 +49,19 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildButton({required String text, required VoidCallback onPressed}) {
-    return ElevatedButton(
-      onPressed: _passwordValidation!.isNotEmpty ? null : onPressed,
-      child: Text(text),
-    );
+    return SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: _passwordValidation!.isNotEmpty ? null : onPressed,
+          style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.all<Color>(
+                Theme.of(context).colorScheme.onSurface),
+            padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
+              const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
+            ),
+          ),
+          child: Text(text),
+        ));
   }
 
   Widget _title() {
@@ -60,6 +69,33 @@ class _LoginPageState extends State<LoginPage> {
       isLogin ? 'Sign In' : 'Create an account',
       style: Theme.of(context).textTheme.headlineLarge,
     );
+  }
+
+  Widget _buildDivider() {
+    return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Container(
+                height: 2,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text('Or login with',
+                  style: Theme.of(context).textTheme.bodyLarge),
+            ),
+            Expanded(
+              child: Container(
+                height: 2,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          ],
+        ));
   }
 
   Future<void> signIn() async {
@@ -118,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             MayaTextField(
               controller: _emailController,
@@ -150,16 +186,11 @@ class _LoginPageState extends State<LoginPage> {
                 style: const TextStyle(color: Colors.red),
               ),
             ],
-            const SizedBox(height: 16.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                _buildButton(
+            Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: _buildButton(
                     text: isLogin ? 'Sign In' : 'Create an account',
-                    onPressed: isLogin ? signIn : signUp),
-              ],
-            ),
-            const SizedBox(height: 16.0),
+                    onPressed: isLogin ? signIn : signUp)),
             TextButton(
               onPressed: () {
                 setState(() {
@@ -169,8 +200,9 @@ class _LoginPageState extends State<LoginPage> {
               child: Text(
                   isLogin ? 'Create an account' : 'Already have an account?'),
             ),
+            _buildDivider(),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              padding: const EdgeInsets.only(top: 16.0, bottom: 64.0),
               child: ElevatedButton.icon(
                 icon: const Icon(
                   FontAwesomeIcons
@@ -184,10 +216,11 @@ class _LoginPageState extends State<LoginPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor:
                       Colors.red, // Background color - Google's red
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(20.0), // Rounded corners
-                  ),
+                  shape: const CircleBorder(), // Make the button circular
+                  padding: const EdgeInsets.all(
+                      20), // Padding to ensure the button is large enough to enclose the icon
+                  minimumSize:
+                      const Size(56, 56), // Set a minimum size for the button
                 ),
               ),
             ),

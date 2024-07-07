@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
-  primaryColor: const Color(0xFFF2A30F), // Primary Orange Color
+  primaryColor: const Color(0xFF266E90), // Primary Orange Color
   colorScheme: const ColorScheme.dark(
     primary: Color(0xFF266E90), // Primary Orange Color
     secondary: Color(0xFFD57D50), // This is the new way to set accent color

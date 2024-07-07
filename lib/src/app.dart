@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:morpheus/src/config/theme/base_dark_them.dart';
-import 'package:morpheus/src/screens/home/home_page.dart';
-import 'package:morpheus/src/screens/widget_tree.dart';
-import 'package:morpheus/src/widgets/choreo_list.dart';
+import 'package:morpheus/src/screens/splash.dart';
 
 import 'sample_feature/sample_item_details_view.dart';
 import 'sample_feature/sample_item_list_view.dart';
@@ -77,7 +75,7 @@ class MyApp extends StatelessWidget {
                     return const SampleItemDetailsView();
                   case SampleItemListView.routeName:
                   default:
-                    return const WidgetTree();
+                    return const SplashScreen();
                 }
               },
             );
