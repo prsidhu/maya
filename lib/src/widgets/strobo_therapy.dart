@@ -118,7 +118,6 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
   }
 
   void stopTherapy() {
-    print("stop");
     _timer?.cancel();
     ref.read(torchLightControllerProvider.notifier).disableTorch();
     ref.read(therapyTimeProvider.notifier).state =
