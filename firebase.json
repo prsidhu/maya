@@ -1,6 +1,1 @@
-{
-  "firestore": {
-    "rules": "firestore.rules",
-    "indexes": "firestore.indexes.json"
-  }
-}
+{"firestore":{"rules":"firestore.rules","indexes":"firestore.indexes.json"},"remoteconfig":{"template":"remoteconfig.template.json"},"flutter":{"platforms":{"android":{"default":{"projectId":"yume-fa6f1","appId":"1:1034642639369:android:342b7db399a36d8cdb86d8","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"yume-fa6f1","appId":"1:1034642639369:ios:d8e6f08c8bf7b00bdb86d8","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"yume-fa6f1","configurations":{"android":"1:1034642639369:android:342b7db399a36d8cdb86d8","ios":"1:1034642639369:ios:d8e6f08c8bf7b00bdb86d8"}}}}}}
