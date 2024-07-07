@@ -8,6 +8,7 @@ import 'package:morpheus/src/providers/countdown.dart';
 import 'package:morpheus/src/providers/torch_light_controller.dart';
 import 'package:morpheus/src/utils/stringUtils.dart';
 import 'package:morpheus/src/widgets/audio_player.dart';
+import 'package:morpheus/src/widgets/choreo_image.dart';
 import 'package:morpheus/src/widgets/text/author_text.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:morpheus/src/providers/therapy_time_provider.dart';
@@ -169,7 +170,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                 const SizedBox(width: 8), // Space between icon and text
                 Expanded(
                   child: Text(
-                    '${isPlaying ? 'Stop' : 'Start'} / ${countdownFormatDuration(remainingTime)}',
+                    '${countdown > 0 ? 'Starting' : isPlaying ? 'Stop' : 'Start'} / ${countdownFormatDuration(remainingTime)}',
                     textAlign: TextAlign.center, // Center the text
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: Theme.of(context).colorScheme.onPrimary,
@@ -214,7 +215,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
     final torchLightState = ref.watch(torchLightControllerProvider);
     final remainingTime = ref.watch(therapyTimeProvider);
     final int countdown = ref.watch(countdownProvider);
-
+    final double imageWidth = MediaQuery.of(context).size.width * 0.85;
     if (!torchLightState.isAvailable) {
       return const Center(
         child: Padding(
@@ -242,15 +243,43 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 50.0),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      countdown > 0 ? '$countdown' : '',
-                      style: Theme.of(context).textTheme.displayMedium,
-                    ),
-                  ),
+                Center(
+                  // Use Center widget to center the image container in the screen
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 50.0),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            width:
+                                imageWidth, // Set width to 50% of the screen width
+                            height:
+                                imageWidth, // Keep the height as is or adjust as needed
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: ChoreoImageProvider.getImageProvider(
+                                    widget.choreography, ref),
+                                fit: BoxFit.cover,
+                                colorFilter: ColorFilter.mode(
+                                  Colors.black.withOpacity(0.5),
+                                  BlendMode.darken,
+                                ),
+                              ),
+                            ),
+                          ),
+                          if (countdown > 0) ...[
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Text(
+                                '$countdown',
+                                style:
+                                    Theme.of(context).textTheme.displayMedium,
+                              ),
+                            )
+                          ]
+                        ],
+                      )),
                 ),
                 Padding(
                     padding: const EdgeInsets.only(bottom: 2.0),
