@@ -49,17 +49,19 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildButton({required String text, required VoidCallback onPressed}) {
-    return ElevatedButton(
-      onPressed: _passwordValidation!.isNotEmpty ? null : onPressed,
-      style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.all<Color>(
-            Theme.of(context).colorScheme.onSurface),
-        padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-          const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
-        ),
-      ),
-      child: Text(text),
-    );
+    return SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: _passwordValidation!.isNotEmpty ? null : onPressed,
+          style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.all<Color>(
+                Theme.of(context).colorScheme.onSurface),
+            padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
+              const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
+            ),
+          ),
+          child: Text(text),
+        ));
   }
 
   Widget _title() {
@@ -67,6 +69,33 @@ class _LoginPageState extends State<LoginPage> {
       isLogin ? 'Sign In' : 'Create an account',
       style: Theme.of(context).textTheme.headlineLarge,
     );
+  }
+
+  Widget _buildDivider() {
+    return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Container(
+                height: 2,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text('Or login with',
+                  style: Theme.of(context).textTheme.bodyLarge),
+            ),
+            Expanded(
+              child: Container(
+                height: 2,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          ],
+        ));
   }
 
   Future<void> signIn() async {
@@ -157,16 +186,11 @@ class _LoginPageState extends State<LoginPage> {
                 style: const TextStyle(color: Colors.red),
               ),
             ],
-            const SizedBox(height: 16.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                _buildButton(
+            Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: _buildButton(
                     text: isLogin ? 'Sign In' : 'Create an account',
-                    onPressed: isLogin ? signIn : signUp),
-              ],
-            ),
-            const SizedBox(height: 16.0),
+                    onPressed: isLogin ? signIn : signUp)),
             TextButton(
               onPressed: () {
                 setState(() {
@@ -176,10 +200,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Text(
                   isLogin ? 'Create an account' : 'Already have an account?'),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Text('or', style: Theme.of(context).textTheme.titleMedium),
-            ),
+            _buildDivider(),
             Padding(
               padding: const EdgeInsets.only(top: 16.0, bottom: 64.0),
               child: ElevatedButton.icon(

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:morpheus/src/models/choreo.dart';
 import 'package:morpheus/src/providers/audioFileProvider.dart';
 import 'package:morpheus/src/providers/countdown.dart';
@@ -220,8 +221,8 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.music_note,
-                          size: 16.0,
+                      Icon(FontAwesomeIcons.music,
+                          size: 12.0,
                           color: Theme.of(context).colorScheme.primary),
                       const SizedBox(width: 8.0),
                       Text(
