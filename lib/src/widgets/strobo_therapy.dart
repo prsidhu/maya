@@ -136,6 +136,55 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
     return (1000 ~/ (frequency * 2)); // Calculate half period in milliseconds
   }
 
+  Widget _buildButton(BuildContext context, int countdown, remainingTime) {
+    return Padding(
+      padding: const EdgeInsets.only(
+          top: 50.0, bottom: 40.0, left: 32.0, right: 32.0),
+      child: Center(
+        child: SizedBox(
+          width: double.infinity, // Make the button full width
+          height: 56.0, // Standard height for buttons
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              shape: const StadiumBorder(), // Rounded edges
+            ),
+            onPressed: countdown > 0
+                ? null
+                : () {
+                    isPlaying ? stopTherapy() : startTherapy();
+                  },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center, // Center the content
+              children: <Widget>[
+                Icon(
+                  countdown > 0
+                      ? Icons.more_horiz
+                      : isPlaying
+                          ? Icons.stop_outlined
+                          : Icons.play_arrow_outlined,
+                  size: 30.0,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+                const SizedBox(width: 8), // Space between icon and text
+                Expanded(
+                  child: Text(
+                    '${isPlaying ? 'Stop' : 'Start'} / ${countdownFormatDuration(remainingTime)}',
+                    textAlign: TextAlign.center, // Center the text
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState(); // Call super.initState() first.
@@ -164,7 +213,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
   Widget build(BuildContext context) {
     final torchLightState = ref.watch(torchLightControllerProvider);
     final remainingTime = ref.watch(therapyTimeProvider);
-    final countdown = ref.watch(countdownProvider);
+    final int countdown = ref.watch(countdownProvider);
 
     if (!torchLightState.isAvailable) {
       return const Center(
@@ -204,7 +253,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                   ),
                 ),
                 Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
+                    padding: const EdgeInsets.only(bottom: 2.0),
                     child: Text(
                       widget.choreography.title,
                       style:
@@ -217,7 +266,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                   AuthorText(author: widget.choreography.author ?? '')
                 ],
                 Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
+                  padding: const EdgeInsets.only(top: 10.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -235,38 +284,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                     ],
                   ),
                 ),
-                Padding(
-                    padding: const EdgeInsets.only(top: 50.0, bottom: 40.0),
-                    child: Center(
-                      child: FloatingActionButton.extended(
-                        backgroundColor:
-                            Theme.of(context).colorScheme.onPrimary,
-                        onPressed: countdown > 0
-                            ? null
-                            : () {
-                                isPlaying ? stopTherapy() : startTherapy();
-                              },
-                        label: Text(
-                          '${isPlaying ? 'Stop' : 'Start'} / ${countdownFormatDuration(remainingTime)}',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(
-                                  color: const Color(0xFF222222),
-                                  fontWeight: FontWeight.bold),
-                        ),
-                        icon: Icon(
-                          countdown > 0
-                              ? Icons.more_horiz
-                              : isPlaying
-                                  ? Icons.stop_outlined
-                                  : Icons.play_arrow_outlined,
-                          size: 32.0,
-                          color: const Color(0xFF222222),
-                        ),
-                        shape: const StadiumBorder(),
-                      ),
-                    )),
+                _buildButton(context, countdown, remainingTime),
                 if (url.isNotEmpty)
                   AudioPlayerWidget(filePath: url, isPlaying: isPlaying)
               ],
