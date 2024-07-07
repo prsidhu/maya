@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
         body: AnimatedOpacity(
             opacity: _opacity,
-            duration: const Duration(milliseconds: 500),
+            duration: const Duration(seconds: 1),
             child: Center(
               child: Padding(
                   padding: const EdgeInsets.all(16.0),

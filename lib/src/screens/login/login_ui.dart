@@ -33,6 +33,9 @@ class _LoginUIState extends State<LoginUI> {
   Widget _buildButton({required String text, required VoidCallback onPressed}) {
     return ElevatedButton(
       onPressed: onPressed,
+      style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.all(Colors.white),
+      ),
       child: Text(text),
     );
   }

@@ -246,7 +246,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                                 isPlaying ? stopTherapy() : startTherapy();
                               },
                         label: Text(
-                          '${isPlaying ? 'Stop' : 'Start'} / ${countdownFormatDuration(remainingTime)}',
+                          '${countdown > 0 ? 'Starting...' : isPlaying ? 'Stop' : 'Start'} / ${countdownFormatDuration(remainingTime)}',
                           style: Theme.of(context)
                               .textTheme
                               .bodyLarge

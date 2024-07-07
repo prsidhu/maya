@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MediaText extends StatelessWidget {
   final String mediaName;
@@ -12,10 +13,13 @@ class MediaText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(
-          Icons.music_note,
-          size: 12.0,
-          color: Theme.of(context).colorScheme.primary,
+        Padding(
+          padding: const EdgeInsets.only(right: 4.0),
+          child: Icon(
+            FontAwesomeIcons.music,
+            size: 10.0,
+            color: Theme.of(context).colorScheme.primary,
+          ),
         ),
         Text(mediaName,
             style: textStyle ??
