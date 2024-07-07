@@ -35,11 +35,18 @@ class _ChoreoDetailsScreenState extends ConsumerState<ChoreoDetailsScreen> {
           extendBodyBehindAppBar: true,
           appBar: AppBar(
             title: Text(widget.choreo.title,
-                style: Theme.of(context).textTheme.headlineLarge),
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    )),
             centerTitle: false,
             backgroundColor:
                 Colors.transparent, // Makes the AppBar background transparent
             elevation: 0, // Removes shadow under the AppBar
+            iconTheme: IconThemeData(
+              color: Theme.of(context)
+                  .colorScheme
+                  .primary, // Change this color as needed
+            ),
           ),
           body: Stack(
             children: [
