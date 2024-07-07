@@ -14,15 +14,20 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        _opacity = 0.0;
-      });
-      Future.delayed(const Duration(milliseconds: 500), () {
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const WidgetTree()));
-      });
+    _navigateToHome();
+  }
+
+  void _navigateToHome() async {
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {
+      _opacity = 0.0;
     });
+    await Future.delayed(const Duration(milliseconds: 500));
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const WidgetTree(),
+      ),
+    );
   }
 
   @override
@@ -30,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
         body: AnimatedOpacity(
             opacity: _opacity,
-            duration: const Duration(seconds: 1),
+            duration: const Duration(milliseconds: 500),
             child: Center(
               child: Padding(
                   padding: const EdgeInsets.all(16.0),

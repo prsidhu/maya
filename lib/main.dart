@@ -10,14 +10,14 @@ void main() async {
   WidgetsFlutterBinding
       .ensureInitialized(); // Ensure plugin services are initialized first
   if (Firebase.apps.isEmpty) {
-    await Firebase.initializeApp(
-        options: const FirebaseOptions(
-      apiKey: 'AIzaSyDMGEDWJBzlmNuGWloRPJlpI0ZseCyn-k8',
-      appId: '1:1034642639369:android:342b7db399a36d8cdb86d8',
-      messagingSenderId: '1034642639369',
-      projectId: 'yume-fa6f1',
-      storageBucket: 'yume-fa6f1.appspot.com',
-    ));
+    await Firebase.initializeApp();
+    // options: const FirebaseOptions(
+    //   apiKey: 'AIzaSyDMGEDWJBzlmNuGWloRPJlpI0ZseCyn-k8',
+    //   appId: '1:1034642639369:android:342b7db399a36d8cdb86d8',
+    //   messagingSenderId: '1034642639369',
+    //   projectId: 'yume-fa6f1',
+    //   storageBucket: 'yume-fa6f1.appspot.com',
+    // )
   }
 
   // Set up the SettingsController, which will glue user settings to multiple
