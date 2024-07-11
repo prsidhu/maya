@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:morpheus/firebase_options.dart';
 import 'package:morpheus/src/utils/analytics.dart';
 
@@ -11,6 +12,7 @@ import 'src/settings/settings_service.dart';
 void main() async {
   WidgetsFlutterBinding
       .ensureInitialized(); // Ensure plugin services are initialized first
+  await dotenv.load(fileName: ".env");
   if (Firebase.apps.isEmpty) {
     await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform);

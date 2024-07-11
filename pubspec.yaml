@@ -30,6 +30,7 @@ dependencies:
   torch_light: ^1.0.0
   wakelock: ^0.6.2
   amplitude_flutter: ^3.13.0
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -50,3 +51,4 @@ flutter:
   assets:
     # Add assets from the images directory to the application.
     - assets/images/
+    - .env

@@ -19,11 +19,8 @@ class Auth {
     UserCredential cred = await _auth.createUserWithEmailAndPassword(
         email: email, password: password);
     Events().loginWithEmail(cred.user?.displayName);
-    Analytics().setIdentity({
-      'email': email,
-      'displayName': cred.user?.displayName,
-      'uid': cred.user?.uid
-    });
+    Analytics().setIdentity(
+        {'displayName': cred.user?.displayName, 'uid': cred.user?.uid});
   }
 
   Future<void> signInWithGoogle() async {
@@ -38,11 +35,8 @@ class Auth {
     UserCredential cred =
         await FirebaseAuth.instance.signInWithCredential(credential);
     Events().loginWithGoogle(cred.user?.displayName);
-    Analytics().setIdentity({
-      'email': cred.user?.email,
-      'displayName': cred.user?.displayName,
-      'uid': cred.user?.uid
-    });
+    Analytics().setIdentity(
+        {'displayName': cred.user?.displayName, 'uid': cred.user?.uid});
   }
 
   Future<void> signOut() async {

@@ -1,13 +1,14 @@
 import 'package:amplitude_flutter/amplitude.dart';
 import 'package:amplitude_flutter/identify.dart';
+import 'package:morpheus/src/utils/envVariables.dart';
 
 class Analytics {
   static final Analytics _instance = Analytics._internal();
   final Amplitude _amplitude;
 
   Analytics._internal()
-      : _amplitude = Amplitude('d22a5cda21c4feacf91c927b3a9818d2') {
-    _amplitude.init('d22a5cda21c4feacf91c927b3a9818d2');
+      : _amplitude = Amplitude(EnvVariables().getAmplitudeInstanceId()) {
+    _amplitude.init(EnvVariables().getAmplitudeInstanceId());
   }
 
   factory Analytics() {
