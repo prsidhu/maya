@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:morpheus/src/config/events.dart';
 import 'package:morpheus/src/providers/signedUrlProvider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
@@ -15,6 +16,7 @@ final audioFileProvider =
     if (await file.exists()) {
       return filePath;
     } else {
+      Events().audioDownloadingEvent(fileName);
       // Fetch signed URL from the API using signedUrlProvider
       final signedUrlAsyncValue = await ref.watch(signedUrlProvider(
               SignedUrlRequest(fileName: fileName, isImage: false))
@@ -23,11 +25,12 @@ final audioFileProvider =
       // Download the file locally
       final dio = Dio();
       await dio.download(signedUrl, filePath);
-
+      Events().audioDownloadedEvent(fileName);
       return filePath;
     }
   } catch (e) {
     print('Error fetching audio file: $e');
+    Events().audioDownloadError(fileName, e.toString());
     return "";
   }
 });

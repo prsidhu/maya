@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:morpheus/src/config/events.dart';
 import 'package:morpheus/src/config/goal_segment.dart';
 import 'package:morpheus/src/models/choreo.dart';
 import 'package:morpheus/src/providers/choreo_provider.dart';
@@ -110,6 +111,7 @@ class _HomePageState extends ConsumerState<HomePage>
                 return ChoreoListItem(
                   choreo: choreo,
                   onTap: () {
+                    Events().choreoClickedEvent(choreo.id, choreo.title);
                     Navigator.push(
                       context,
                       MaterialPageRoute(

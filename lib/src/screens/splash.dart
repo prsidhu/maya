@@ -13,7 +13,6 @@ class _SplashScreenState extends State<SplashScreen> {
   double _opacity = 1.0;
   @override
   void initState() {
-    print("#### splash ");
     super.initState();
     _navigateToHome();
   }

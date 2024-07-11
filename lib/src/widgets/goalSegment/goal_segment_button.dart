@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:morpheus/src/config/events.dart';
 import 'package:morpheus/src/config/goal_segment.dart';
 import 'package:morpheus/src/providers/goal_segment_provider.dart';
+import 'package:morpheus/src/utils/analytics.dart';
 
 class GoalSegmentButton extends ConsumerWidget {
   const GoalSegmentButton({super.key});
@@ -54,8 +56,10 @@ class GoalSegmentButton extends ConsumerWidget {
                 const Size(100, 70),
               ),
             ),
-            onPressed: () =>
-                ref.read(goalSegmentProvider.notifier).state = segment,
+            onPressed: () {
+              Events().selectGoalEvent(segment.name);
+              ref.read(goalSegmentProvider.notifier).state = segment;
+            },
             child: Text(buttonText),
           ),
         );

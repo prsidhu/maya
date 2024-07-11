@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:morpheus/src/config/events.dart';
 import 'package:morpheus/src/models/choreo.dart';
 import 'package:morpheus/src/providers/audioFileProvider.dart';
 import 'package:morpheus/src/providers/countdown.dart';
@@ -32,7 +33,8 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
     // Reset any ongoing therapy
     stopTherapy();
     Wakelock.enable(); // Enable wakelock to keep the screen on
-
+    Events().startTherapyEvent(widget.choreography.id,
+        widget.choreography.title, widget.choreography.totalDuration ?? 0);
     final TherapyTimeNotifier therapyTimer =
         ref.watch(therapyTimeProvider.notifier);
     int totalDuration = calculateTotalDuration(widget.choreography.sequence);
@@ -152,7 +154,15 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
             onPressed: countdown > 0
                 ? null
                 : () {
-                    isPlaying ? stopTherapy() : startTherapy();
+                    if (isPlaying) {
+                      Events().stopTherapyEvent(widget.choreography.id,
+                          widget.choreography.title, remainingTime);
+                      stopTherapy();
+                    } else {
+                      Events().startTherapyEvent(widget.choreography.id,
+                          widget.choreography.title, remainingTime);
+                      startTherapy();
+                    }
                   },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center, // Center the content
@@ -228,12 +238,14 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
         ref.watch(audioFileProvider(widget.choreography.mediaName ?? ""));
 
     return audioFileAsyncValue.when(
-        loading: () => const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(),
-              ],
-            ),
+        loading: () {
+          return const Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(),
+            ],
+          );
+        },
         error: (err, stack) => const Text('Failed to load the audio file.'),
         data: (String url) {
           return Padding(
