@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:morpheus/src/config/events.dart';
 import 'package:morpheus/src/utils/auth.dart';
 import 'package:morpheus/src/widgets/password_field.dart';
 import 'package:morpheus/src/widgets/text_field.dart';
@@ -117,6 +118,7 @@ class _LoginPageState extends State<LoginPage> {
         _emailController.text,
         _passwordController.text,
       );
+      Events().loginWithEmail();
     } on FirebaseAuthException catch (e) {
       setState(() {
         _errorMessage = e.message;
@@ -135,6 +137,7 @@ class _LoginPageState extends State<LoginPage> {
         idToken: googleAuth.idToken,
       );
       await FirebaseAuth.instance.signInWithCredential(credential);
+      Events().loginWithGoogle();
     } on FirebaseAuthException catch (e) {
       setState(() {
         _errorMessage = e.message;

@@ -1,6 +1,15 @@
 import 'package:morpheus/src/utils/analytics.dart';
 
 class Events {
+  /* Auth Events */
+  void loginWithEmail() {
+    Analytics().logEvent('login_with_email');
+  }
+
+  void loginWithGoogle() {
+    Analytics().logEvent('login_with_google');
+  }
+
   void choreoClickedEvent(String id, String title) {
     Analytics().logEvent('choreo_clicked', {'id': id, 'title': title});
   }
