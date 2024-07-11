@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:morpheus/src/models/choreo.dart';
-import 'package:morpheus/src/utils/stringUtils.dart';
-import 'package:morpheus/src/widgets/choreo_image.dart';
-import 'package:morpheus/src/widgets/text/author_text.dart';
-import 'package:morpheus/src/widgets/text/media_text.dart';
+import 'package:maya/src/models/choreo.dart';
+import 'package:maya/src/utils/stringUtils.dart';
+import 'package:maya/src/widgets/choreo_image.dart';
+import 'package:maya/src/widgets/text/author_text.dart';
+import 'package:maya/src/widgets/text/media_text.dart';
 
 class ChoreoListItem extends ConsumerWidget {
   final Choreo choreo;

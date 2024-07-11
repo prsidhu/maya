@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:morpheus/src/config/theme/base_dark_them.dart';
-import 'package:morpheus/src/screens/splash.dart';
+import 'package:maya/src/config/theme/base_dark_them.dart';
+import 'package:maya/src/screens/splash.dart';
 
 import 'sample_feature/sample_item_details_view.dart';
 import 'sample_feature/sample_item_list_view.dart';

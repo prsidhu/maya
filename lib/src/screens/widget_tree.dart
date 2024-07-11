@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:morpheus/src/screens/home/home_page.dart';
-import 'package:morpheus/src/screens/login/login_page.dart';
-import 'package:morpheus/src/utils/auth.dart';
+import 'package:maya/src/screens/home/home_page.dart';
+import 'package:maya/src/screens/login/login_page.dart';
+import 'package:maya/src/utils/auth.dart';
 
 class WidgetTree extends StatefulWidget {
   const WidgetTree({super.key});

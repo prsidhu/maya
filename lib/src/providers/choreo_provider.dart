@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:morpheus/src/models/choreo.dart';
+import 'package:maya/src/models/choreo.dart';
 
 const String choreoCollection = 'choreo';
 

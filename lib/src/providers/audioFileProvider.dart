@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:morpheus/src/config/events.dart';
-import 'package:morpheus/src/providers/signedUrlProvider.dart';
+import 'package:maya/src/config/events.dart';
+import 'package:maya/src/providers/signedUrlProvider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
 import 'dart:io';

@@ -1,7 +1,7 @@
 import 'package:amplitude_flutter/amplitude.dart';
 import 'package:amplitude_flutter/identify.dart';
-import 'package:morpheus/src/utils/config.dart';
-import 'package:morpheus/src/utils/envVariables.dart';
+import 'package:maya/src/utils/config.dart';
+import 'package:maya/src/utils/envVariables.dart';
 
 class Analytics {
   static final Analytics _instance = Analytics._internal();

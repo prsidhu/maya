@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:morpheus/src/models/choreo.dart';
-import 'package:morpheus/src/providers/torch_light_controller.dart';
-import 'package:morpheus/src/widgets/strobo_therapy.dart';
+import 'package:maya/src/models/choreo.dart';
+import 'package:maya/src/providers/torch_light_controller.dart';
+import 'package:maya/src/widgets/strobo_therapy.dart';
 
 class ChoreoDetailsScreen extends ConsumerStatefulWidget {
   final Choreo choreo;

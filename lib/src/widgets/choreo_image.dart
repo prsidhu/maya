@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:morpheus/src/models/choreo.dart';
-import 'package:morpheus/src/providers/image_provider.dart';
+import 'package:maya/src/models/choreo.dart';
+import 'package:maya/src/providers/image_provider.dart';
 
 class ChoreoImageProvider {
   static ImageProvider<Object> getImageProvider(Choreo choreo, WidgetRef ref) {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:morpheus/src/config/events.dart';
-import 'package:morpheus/src/config/goal_segment.dart';
-import 'package:morpheus/src/providers/goal_segment_provider.dart';
+import 'package:maya/src/config/events.dart';
+import 'package:maya/src/config/goal_segment.dart';
+import 'package:maya/src/providers/goal_segment_provider.dart';
 
 class GoalSegmentButton extends ConsumerWidget {
   const GoalSegmentButton({super.key});

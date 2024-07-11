@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:morpheus/src/providers/signedUrlProvider.dart';
+import 'package:maya/src/providers/signedUrlProvider.dart';
 import 'package:path_provider/path_provider.dart';
 
 final dioProvider = Provider((ref) => Dio());

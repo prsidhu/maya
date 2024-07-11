@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:morpheus/src/providers/torch_light_controller.dart';
+import 'package:maya/src/providers/torch_light_controller.dart';
 
 class TorchLightWidget extends ConsumerWidget {
   const TorchLightWidget({super.key});

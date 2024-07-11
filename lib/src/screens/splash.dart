@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:morpheus/src/screens/widget_tree.dart';
-import 'package:morpheus/src/widgets/text/logo_text.dart';
+import 'package:maya/src/screens/widget_tree.dart';
+import 'package:maya/src/widgets/text/logo_text.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

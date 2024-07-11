@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:morpheus/src/utils/auth.dart';
+import 'package:maya/src/utils/auth.dart';
 
 class LoginUI extends StatefulWidget {
   const LoginUI({super.key});
@@ -85,12 +85,12 @@ class _LoginUIState extends State<LoginUI> {
             obscureText: true,
           ),
           ...[
-          const SizedBox(height: 16.0),
-          Text(
-            _errorMessage,
-            style: const TextStyle(color: Colors.red),
-          ),
-        ],
+            const SizedBox(height: 16.0),
+            Text(
+              _errorMessage,
+              style: const TextStyle(color: Colors.red),
+            ),
+          ],
           const SizedBox(height: 16.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

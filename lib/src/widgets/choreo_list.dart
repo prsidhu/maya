@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:morpheus/src/models/choreo.dart';
-import 'package:morpheus/src/providers/choreo_provider.dart';
-import 'package:morpheus/src/widgets/choreo_detail.dart';
+import 'package:maya/src/models/choreo.dart';
+import 'package:maya/src/providers/choreo_provider.dart';
+import 'package:maya/src/widgets/choreo_detail.dart';
 
 class ChoreosListScreen extends ConsumerWidget {
   const ChoreosListScreen({super.key});

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:morpheus/src/config/events.dart';
-import 'package:morpheus/src/config/goal_segment.dart';
-import 'package:morpheus/src/models/choreo.dart';
-import 'package:morpheus/src/providers/choreo_provider.dart';
-import 'package:morpheus/src/providers/goal_segment_provider.dart';
-import 'package:morpheus/src/widgets/choreo_detail.dart';
-import 'package:morpheus/src/widgets/choreo_list_item.dart';
-import 'package:morpheus/src/widgets/goalSegment/goal_segment_widget.dart';
-import 'package:morpheus/src/widgets/text/logo_text.dart';
-import 'package:morpheus/src/widgets/text/primary_title.dart';
+import 'package:maya/src/config/events.dart';
+import 'package:maya/src/config/goal_segment.dart';
+import 'package:maya/src/models/choreo.dart';
+import 'package:maya/src/providers/choreo_provider.dart';
+import 'package:maya/src/providers/goal_segment_provider.dart';
+import 'package:maya/src/widgets/choreo_detail.dart';
+import 'package:maya/src/widgets/choreo_list_item.dart';
+import 'package:maya/src/widgets/goalSegment/goal_segment_widget.dart';
+import 'package:maya/src/widgets/text/logo_text.dart';
+import 'package:maya/src/widgets/text/primary_title.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});

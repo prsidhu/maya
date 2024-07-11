@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:morpheus/src/widgets/goalSegment/goal_segment_button.dart';
-import 'package:morpheus/src/widgets/text/primary_title.dart';
+import 'package:maya/src/widgets/goalSegment/goal_segment_button.dart';
+import 'package:maya/src/widgets/text/primary_title.dart';
 
 class GoalSegmentWidget extends StatelessWidget {
   const GoalSegmentWidget({super.key});

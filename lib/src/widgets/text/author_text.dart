@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:morpheus/src/utils/stringUtils.dart';
+import 'package:maya/src/utils/stringUtils.dart';
 
 class AuthorText extends StatelessWidget {
   final String author;

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:morpheus/src/config/events.dart';
-import 'package:morpheus/src/utils/analytics.dart';
+import 'package:maya/src/config/events.dart';
+import 'package:maya/src/utils/analytics.dart';
 
 class Auth {
   final FirebaseAuth _auth = FirebaseAuth.instance;

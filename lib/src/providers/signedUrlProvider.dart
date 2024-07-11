@@ -2,8 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'package:morpheus/src/config/constants.dart';
-import 'package:morpheus/src/models/signedUrl.dart';
+import 'package:maya/src/config/constants.dart';
+import 'package:maya/src/models/signedUrl.dart';
 
 class SignedUrlRequest {
   final String fileName;

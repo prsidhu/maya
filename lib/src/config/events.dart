@@ -1,4 +1,4 @@
-import 'package:morpheus/src/utils/analytics.dart';
+import 'package:maya/src/utils/analytics.dart';
 
 class Events {
   /* Auth Events */
