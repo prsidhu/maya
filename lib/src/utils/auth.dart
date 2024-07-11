@@ -27,8 +27,8 @@ class Auth {
   }
 
   Future<void> signInWithGoogle() async {
-    final GoogleSignIn _googleSignIn = GoogleSignIn();
-    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth =
         await googleUser!.authentication;
     final AuthCredential credential = GoogleAuthProvider.credential(

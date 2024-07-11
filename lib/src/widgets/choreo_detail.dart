@@ -8,7 +8,7 @@ import 'package:morpheus/src/widgets/strobo_therapy.dart';
 class ChoreoDetailsScreen extends ConsumerStatefulWidget {
   final Choreo choreo;
 
-  ChoreoDetailsScreen({required this.choreo});
+  const ChoreoDetailsScreen({super.key, required this.choreo});
 
   @override
   _ChoreoDetailsScreenState createState() => _ChoreoDetailsScreenState();

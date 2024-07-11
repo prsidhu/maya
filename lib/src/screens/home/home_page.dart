@@ -12,6 +12,8 @@ import 'package:morpheus/src/widgets/text/logo_text.dart';
 import 'package:morpheus/src/widgets/text/primary_title.dart';
 
 class HomePage extends ConsumerStatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }

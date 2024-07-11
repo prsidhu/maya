@@ -7,14 +7,12 @@ final ThemeData darkTheme = ThemeData(
   colorScheme: const ColorScheme.dark(
     primary: Color(0xFF266E90), // Primary Orange Color
     secondary: Color(0xFFD57D50), // This is the new way to set accent color
-    tertiary: Color(0xFFD9D9D9),
-    background: Color(0xFF5E5E5E), // Background Color
+    tertiary: Color(0xFFD9D9D9), // Background Color
     surface: Color(0xFF5E5E5E), // Background Highlight Color
     surfaceDim: Color(0xFF061F2A),
     onPrimary: Color(0xFFFFFFFF), // Text/icon color on primary color
     onSecondary: Color(0xFFFFFFFF), // Text/icon color on secondary color
-    onSurface: Color(0xFFBDBDBD), // Text/icon color on surface color
-    onBackground: Color(0xFFBDBDBD), // Text/icon color on background color
+    onSurface: Color(0xFFBDBDBD), // Text/icon color on background color
   ),
   scaffoldBackgroundColor: const Color(0xFF121212), // Background Color
   cardColor: const Color(0xFF1E1E1E), // Background Highlight Color

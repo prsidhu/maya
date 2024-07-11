@@ -17,7 +17,7 @@ import 'package:morpheus/src/providers/therapy_time_provider.dart';
 class StroboTherapyWidget extends ConsumerStatefulWidget {
   final Choreo choreography;
 
-  StroboTherapyWidget({Key? key, required this.choreography}) : super(key: key);
+  const StroboTherapyWidget({super.key, required this.choreography});
 
   @override
   _StroboTherapyWidgetState createState() => _StroboTherapyWidgetState();
@@ -43,7 +43,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
     // Start the countdown
     final Countdown countdown = ref.watch(countdownProvider.notifier);
     countdown.set(3); // Start the countdown from 3 seconds
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
       if (countdown.state == 0) {
         timer.cancel();
       } else {

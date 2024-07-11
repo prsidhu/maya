@@ -4,6 +4,8 @@ import 'package:morpheus/src/models/choreo.dart';
 import 'package:morpheus/src/providers/choreo_provider.dart';
 
 class ChoreoDropdown extends ConsumerWidget {
+  const ChoreoDropdown({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final choreoAsyncValue = ref.watch(choreoProvider);

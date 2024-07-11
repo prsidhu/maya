@@ -6,7 +6,7 @@ class AudioPlayerWidget extends StatefulWidget {
   final String filePath;
   final bool isPlaying;
 
-  AudioPlayerWidget({required this.filePath, required this.isPlaying});
+  const AudioPlayerWidget({super.key, required this.filePath, required this.isPlaying});
 
   @override
   _AudioPlayerWidgetState createState() => _AudioPlayerWidgetState();

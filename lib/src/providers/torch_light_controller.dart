@@ -31,11 +31,11 @@ class TorchLightController extends StateNotifier<TorchLightState> {
   Future<void> enableTorch() async {
     try {
       await TorchLight.enableTorch();
-    } on EnableTorchExistentUserException catch (e) {
+    } on EnableTorchExistentUserException {
       // The camera is in use.
-    } on EnableTorchNotAvailableException catch (e) {
+    } on EnableTorchNotAvailableException {
       // Torch was not detected.
-    } on EnableTorchException catch (e) {
+    } on EnableTorchException {
       // An unknown error occurred.
     }
   }
@@ -43,11 +43,11 @@ class TorchLightController extends StateNotifier<TorchLightState> {
   Future<void> disableTorch() async {
     try {
       await TorchLight.disableTorch();
-    } on DisableTorchExistentUserException catch (e) {
+    } on DisableTorchExistentUserException {
       // The camera is in use.
-    } on DisableTorchNotAvailableException catch (e) {
+    } on DisableTorchNotAvailableException {
       // Torch was not detected.
-    } on DisableTorchException catch (e) {
+    } on DisableTorchException {
       // An unknown error occurred.
     }
   }

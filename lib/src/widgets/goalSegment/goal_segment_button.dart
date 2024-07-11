@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:morpheus/src/config/events.dart';
 import 'package:morpheus/src/config/goal_segment.dart';
 import 'package:morpheus/src/providers/goal_segment_provider.dart';
-import 'package:morpheus/src/utils/analytics.dart';
 
 class GoalSegmentButton extends ConsumerWidget {
   const GoalSegmentButton({super.key});

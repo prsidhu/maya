@@ -7,7 +7,7 @@ import 'package:morpheus/src/widgets/choreo_list.dart';
 final currentChoreoProvider = StateProvider<Choreo?>((ref) => null);
 
 class TherapyPage extends ConsumerWidget {
-  TherapyPage({Key? key}) : super(key: key);
+  const TherapyPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -15,11 +15,11 @@ class TherapyPage extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Yume'),
       ),
-      body: Column(
+      body: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ChoreoDropdown(),
-          const SizedBox(height: 40),
+          SizedBox(height: 40),
           ChoreosListScreen(),
         ],
       ),

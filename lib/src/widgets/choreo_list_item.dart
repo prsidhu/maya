@@ -10,8 +10,7 @@ class ChoreoListItem extends ConsumerWidget {
   final Choreo choreo;
   final onTap;
 
-  ChoreoListItem({Key? key, required this.choreo, required this.onTap})
-      : super(key: key);
+  const ChoreoListItem({super.key, required this.choreo, required this.onTap});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

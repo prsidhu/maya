@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:morpheus/src/utils/auth.dart';
 
 class LoginUI extends StatefulWidget {
-  const LoginUI({Key? key}) : super(key: key);
+  const LoginUI({super.key});
 
   @override
   _LoginUIState createState() => _LoginUIState();
 }
 
 class _LoginUIState extends State<LoginUI> {
-  String? _errorMessage = '';
+  final String _errorMessage = '';
   bool isLogin = true;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -84,13 +84,13 @@ class _LoginUIState extends State<LoginUI> {
             icon: Icons.lock,
             obscureText: true,
           ),
-          if (_errorMessage != null) ...[
-            const SizedBox(height: 16.0),
-            Text(
-              _errorMessage!,
-              style: const TextStyle(color: Colors.red),
-            ),
-          ],
+          ...[
+          const SizedBox(height: 16.0),
+          Text(
+            _errorMessage,
+            style: const TextStyle(color: Colors.red),
+          ),
+        ],
           const SizedBox(height: 16.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -5,6 +5,8 @@ import 'package:morpheus/src/providers/choreo_provider.dart';
 import 'package:morpheus/src/widgets/choreo_detail.dart';
 
 class ChoreosListScreen extends ConsumerWidget {
+  const ChoreosListScreen({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final choreoAsyncValue = ref.watch(choreoProvider);
