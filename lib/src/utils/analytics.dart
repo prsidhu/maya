@@ -1,4 +1,5 @@
 import 'package:amplitude_flutter/amplitude.dart';
+import 'package:amplitude_flutter/identify.dart';
 
 class Analytics {
   static final Analytics _instance = Analytics._internal();
@@ -15,5 +16,13 @@ class Analytics {
 
   void logEvent(String eventName, [Map<String, dynamic>? properties]) {
     _amplitude.logEvent(eventName, eventProperties: properties);
+  }
+
+  void setIdentity(Map<String, dynamic> identity) {
+    final Identify identify = Identify();
+    identity.forEach((key, value) {
+      identify.setOnce(key, value);
+    });
+    _amplitude.identify(identify);
   }
 }
