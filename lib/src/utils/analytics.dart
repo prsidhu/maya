@@ -1,5 +1,6 @@
 import 'package:amplitude_flutter/amplitude.dart';
 import 'package:amplitude_flutter/identify.dart';
+import 'package:morpheus/src/utils/config.dart';
 import 'package:morpheus/src/utils/envVariables.dart';
 
 class Analytics {
@@ -16,7 +17,9 @@ class Analytics {
   }
 
   void logEvent(String eventName, [Map<String, dynamic>? properties]) {
-    _amplitude.logEvent(eventName, eventProperties: properties);
+    if (Config.isProduction) {
+      _amplitude.logEvent(eventName, eventProperties: properties);
+    }
   }
 
   void setIdentity(Map<String, dynamic> identity) {
