@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:maya/firebase_options.dart';
 import 'package:maya/src/utils/analytics.dart';
+import 'package:flutter/services.dart';
 
 import 'src/app.dart';
 import 'src/settings/settings_controller.dart';
@@ -29,5 +30,10 @@ void main() async {
   // Run the app and pass in the SettingsController. The app listens to the
   // SettingsController for changes, then passes it further down to the
   // SettingsView.
-  runApp(ProviderScope(child: MyApp(settingsController: settingsController)));
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) {
+    runApp(ProviderScope(child: MyApp(settingsController: settingsController)));
+  });
 }
