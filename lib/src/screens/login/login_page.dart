@@ -139,85 +139,106 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         title: _title(),
       ),
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            MayaTextField(
-              controller: _emailController,
-              labelText: 'Email',
-              leadingIcon: Icons.email,
-            ),
-            const SizedBox(height: 16.0),
-            PasswordField(
-                controller: _passwordController, labelText: 'Password'),
-            if (!isLogin) ...[
-              const SizedBox(height: 16.0),
-              PasswordField(
-                controller: _confirmPasswordController,
-                labelText: 'Confirm password',
-                onChanged: _validatePassword,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
               ),
-            ],
-            if (_passwordValidation!.isNotEmpty) ...[
-              const SizedBox(height: 8.0),
-              Text(
-                _passwordValidation!,
-                style: const TextStyle(color: Colors.red),
-              )
-            ],
-            if (_errorMessage != null) ...[
-              const SizedBox(height: 16.0),
-              Text(
-                _errorMessage!,
-                style: const TextStyle(color: Colors.red),
-              ),
-            ],
-            Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: _buildButton(
-                    text: isLogin ? 'Sign In' : 'Create an account',
-                    onPressed: isLogin ? signIn : signUp)),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  isLogin = !isLogin;
-                });
-              },
-              child: Text(
-                  isLogin ? 'Create an account' : 'Already have an account?'),
-            ),
-            _buildDivider(),
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0, bottom: 64.0),
-              child: ElevatedButton.icon(
-                icon: const Icon(
-                  FontAwesomeIcons
-                      .google, // Using FontAwesomeIcons for Google icon
-                  color: Colors.white, // Icon color
+              child: IntrinsicHeight(
+                child: Container(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      MayaTextField(
+                        controller: _emailController,
+                        labelText: 'Email',
+                        leadingIcon: Icons.email,
+                      ),
+                      const SizedBox(height: 16.0),
+                      PasswordField(
+                        controller: _passwordController,
+                        labelText: 'Password',
+                      ),
+                      if (!isLogin) ...[
+                        const SizedBox(height: 16.0),
+                        PasswordField(
+                          controller: _confirmPasswordController,
+                          labelText: 'Confirm password',
+                          onChanged: _validatePassword,
+                        ),
+                      ],
+                      if (_passwordValidation!.isNotEmpty) ...[
+                        const SizedBox(height: 8.0),
+                        Text(
+                          _passwordValidation!,
+                          style: const TextStyle(color: Colors.red),
+                        )
+                      ],
+                      if (_errorMessage != null) ...[
+                        const SizedBox(height: 16.0),
+                        Text(
+                          _errorMessage!,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      ],
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: _buildButton(
+                          text: isLogin ? 'Sign In' : 'Create an account',
+                          onPressed: isLogin ? signIn : signUp,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            isLogin = !isLogin;
+                          });
+                        },
+                        child: Text(
+                          isLogin
+                              ? 'Create an account'
+                              : 'Already have an account?',
+                        ),
+                      ),
+                      _buildDivider(),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16.0, bottom: 64.0),
+                        child: ElevatedButton.icon(
+                          icon: const Icon(
+                            FontAwesomeIcons
+                                .google, // Using FontAwesomeIcons for Google icon
+                            color: Colors.white, // Icon color
+                          ),
+                          label: const Text(
+                              ''), // No text, as you want only the icon
+                          onPressed: () {
+                            signInWithGoogle();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Colors.red, // Background color - Google's red
+                            shape:
+                                const CircleBorder(), // Make the button circular
+                            padding: const EdgeInsets.all(
+                                20), // Padding to ensure the button is large enough to enclose the icon
+                            minimumSize: const Size(
+                                56, 56), // Set a minimum size for the button
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                label: const Text(''), // No text, as you want only the icon
-                onPressed: () {
-                  signInWithGoogle();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      Colors.red, // Background color - Google's red
-                  shape: const CircleBorder(), // Make the button circular
-                  padding: const EdgeInsets.all(
-                      20), // Padding to ensure the button is large enough to enclose the icon
-                  minimumSize:
-                      const Size(56, 56), // Set a minimum size for the button
-                ),
               ),
             ),
-          ],
-        ),
+          );
+        },
       ),
+      resizeToAvoidBottomInset: true,
     );
   }
 }
