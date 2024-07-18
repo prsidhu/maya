@@ -141,7 +141,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
   Widget _buildButton(BuildContext context, int countdown, remainingTime) {
     return Padding(
       padding: const EdgeInsets.only(
-          top: 50.0, bottom: 40.0, left: 32.0, right: 32.0),
+          top: 50.0, bottom: 40.0, left: 40.0, right: 40.0),
       child: Center(
         child: SizedBox(
           width: double.infinity, // Make the button full width
@@ -177,15 +177,13 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                   color: Theme.of(context).colorScheme.onPrimary,
                 ),
                 const SizedBox(width: 8), // Space between icon and text
-                Expanded(
-                  child: Text(
-                    '${countdown > 0 ? 'Starting' : isPlaying ? 'Stop' : 'Start'} / ${countdownFormatDuration(remainingTime)}',
-                    textAlign: TextAlign.center, // Center the text
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
+                Text(
+                  '${countdown > 0 ? 'Starting' : isPlaying ? 'Stop' : 'Start'} / ${countdownFormatDuration(remainingTime)}',
+                  textAlign: TextAlign.center, // Center the text
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               ],
             ),

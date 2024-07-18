@@ -72,7 +72,7 @@ class _HomePageState extends ConsumerState<HomePage>
               Image.asset('assets/images/maya_logo.png', fit: BoxFit.fitWidth),
           title: const LogoText()),
       body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 1000),
         child: selectedGoalSegment == null
             ? const Center(child: GoalSegmentWidget())
             : AnimatedBuilder(
