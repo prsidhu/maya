@@ -223,14 +223,6 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
     final remainingTime = ref.watch(therapyTimeProvider);
     final int countdown = ref.watch(countdownProvider);
     final double imageWidth = MediaQuery.of(context).size.width * 0.85;
-    if (!torchLightState.isAvailable) {
-      return const Center(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 40.0),
-          child: Text('Torch light is not available on this device.'),
-        ),
-      );
-    }
 
     final audioFileAsyncValue =
         ref.watch(audioFileProvider(widget.choreography.mediaName ?? ""));
@@ -303,28 +295,41 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                     widget.choreography.author!.isNotEmpty) ...[
                   AuthorText(author: widget.choreography.author ?? '')
                 ],
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(FontAwesomeIcons.music,
-                          size: 12.0,
-                          color: Theme.of(context).colorScheme.primary),
-                      const SizedBox(width: 8.0),
-                      Text(
-                        widget.choreography.mediaName ?? 'Media unavailable',
-                        style:
-                            Theme.of(context).textTheme.labelMedium?.copyWith(
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                      ),
-                    ],
+                if (!torchLightState.isAvailable) ...[
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 40.0),
+                      child:
+                          Text('Torch light is not available on this device.'),
+                    ),
+                  )
+                ],
+                if (torchLightState.isAvailable) ...[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(FontAwesomeIcons.music,
+                            size: 12.0,
+                            color: Theme.of(context).colorScheme.primary),
+                        const SizedBox(width: 8.0),
+                        Text(
+                          widget.choreography.mediaName ?? 'Media unavailable',
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelMedium
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                _buildButton(context, countdown, remainingTime),
-                if (url.isNotEmpty)
-                  AudioPlayerWidget(filePath: url, isPlaying: isPlaying)
+                  _buildButton(context, countdown, remainingTime),
+                  if (url.isNotEmpty)
+                    AudioPlayerWidget(filePath: url, isPlaying: isPlaying)
+                ]
               ],
             ),
           );

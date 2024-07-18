@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:maya/src/models/choreo.dart';
-import 'package:maya/src/providers/torch_light_controller.dart';
 import 'package:maya/src/widgets/strobo_therapy.dart';
 
 class ChoreoDetailsScreen extends ConsumerStatefulWidget {
@@ -22,9 +21,6 @@ class _ChoreoDetailsScreenState extends ConsumerState<ChoreoDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final TorchLightState torchLightState =
-        ref.watch(torchLightControllerProvider);
-
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark,
         child: Scaffold(
@@ -52,18 +48,9 @@ class _ChoreoDetailsScreenState extends ConsumerState<ChoreoDetailsScreen> {
                 mainAxisSize: MainAxisSize.min, // Aligns towards the bottom
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (!torchLightState.isAvailable)
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 40.0),
-                      child: Text(
-                        'Torch light is not available on this device.',
-                      ),
-                    ),
-                  if (torchLightState.isAvailable) ...[
-                    StroboTherapyWidget(
-                      choreography: widget.choreo,
-                    )
-                  ]
+                  StroboTherapyWidget(
+                    choreography: widget.choreo,
+                  )
                 ],
               ),
             ),
