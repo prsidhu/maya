@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:maya/src/config/events.dart';
 import 'package:maya/src/screens/home/home_page.dart';
 import 'package:maya/src/utils/auth.dart';
 
@@ -34,6 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
       setState(() {
         _errorMessage = e.message ?? '';
       });
+      Events().googleLoginError(e.message ?? e.code);
     }
   }
 

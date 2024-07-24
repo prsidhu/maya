@@ -51,7 +51,7 @@ class ChoreoListItem extends ConsumerWidget {
                         choreo.title,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               fontWeight: FontWeight.w700,
-                              color: Theme.of(context).colorScheme.onPrimary,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                       ),
                       if (choreo.author != null &&

@@ -10,6 +10,10 @@ class Events {
     Analytics().logEvent('login_with_google', {'displayName': displayName});
   }
 
+  void googleLoginError(String error) {
+    Analytics().logEvent('google_login_error', {'error': error});
+  }
+
   void choreoClickedEvent(String id, String title) {
     Analytics().logEvent('choreo_clicked', {'id': id, 'title': title});
   }
