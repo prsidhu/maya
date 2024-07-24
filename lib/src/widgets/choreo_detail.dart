@@ -23,10 +23,13 @@ class _ChoreoDetailsScreenState extends ConsumerState<ChoreoDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final double imageWidth = MediaQuery.of(context).size.width * 0.85;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final halfScreenHeight = screenHeight * 0.5;
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark,
         child: Scaffold(
-          extendBodyBehindAppBar: true,
+          extendBodyBehindAppBar: false,
           appBar: AppBar(
             title: Text(widget.choreo.title,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -42,37 +45,34 @@ class _ChoreoDetailsScreenState extends ConsumerState<ChoreoDetailsScreen> {
                   .primary, // Change this color as needed
             ),
           ),
-          body: Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min, // Aligns towards the bottom
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                      child: Container(
-                    width: imageWidth, // Set width to 50% of the screen width
-                    height:
-                        imageWidth, // Keep the height as is or adjust as needed
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: ChoreoImageProvider.getImageProvider(
-                            widget.choreo, ref),
-                        fit: BoxFit.cover,
-                        colorFilter: ColorFilter.mode(
-                          Colors.black.withOpacity(0.5),
-                          BlendMode.darken,
-                        ),
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // Aligns towards the bottom
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                    child: Container(
+                  width: imageWidth, // Set width to 50% of the screen width
+                  height:
+                      imageWidth, // Keep the height as is or adjust as needed
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: ChoreoImageProvider.getImageProvider(
+                          widget.choreo, ref),
+                      fit: BoxFit.cover,
+                      colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(0.5),
+                        BlendMode.darken,
                       ),
                     ),
-                  )),
-                  StroboTherapyWidget(
-                    choreography: widget.choreo,
-                  )
-                ],
-              ),
+                  ),
+                )),
+                StroboTherapyWidget(
+                  choreography: widget.choreo,
+                )
+              ],
             ),
           ),
         ));

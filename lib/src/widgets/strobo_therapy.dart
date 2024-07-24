@@ -229,11 +229,16 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
 
     return audioFileAsyncValue.when(
         loading: () {
-          return const Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircularProgressIndicator(),
-            ],
+          return const Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ],
+            ),
           );
         },
         error: (err, stack) => const Text('Failed to load the audio file.'),
@@ -282,10 +287,6 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                         ],
                       )),
                 ),
-                // if (widget.choreography.author != null &&
-                //     widget.choreography.author!.isNotEmpty) ...[
-                //   AuthorText(author: widget.choreography.author ?? '')
-                // ],
                 if (!torchLightState.isAvailable) ...[
                   Center(
                     child: Padding(
