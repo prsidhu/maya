@@ -14,9 +14,9 @@ class AuthorText extends StatelessWidget {
       padding: padding ?? const EdgeInsets.symmetric(vertical: 8.0),
       child: Text('by ${capitalizeName(author)}',
           style:
-              style?.copyWith(color: Theme.of(context).colorScheme.primary) ??
+              style?.copyWith(color: Theme.of(context).colorScheme.tertiary) ??
                   Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.tertiary,
                       )),
     );
   }

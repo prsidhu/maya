@@ -174,14 +174,14 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                           ? Icons.stop_outlined
                           : Icons.play_arrow_outlined,
                   size: 30.0,
-                  color: Theme.of(context).colorScheme.onPrimary,
+                  color: Theme.of(context).colorScheme.surfaceDim,
                 ),
                 const SizedBox(width: 8), // Space between icon and text
                 Text(
                   '${countdown > 0 ? 'Starting' : isPlaying ? 'Stop' : 'Start'} / ${countdownFormatDuration(remainingTime)}',
                   textAlign: TextAlign.center, // Center the text
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary,
+                        color: Theme.of(context).colorScheme.surfaceDim,
                         fontWeight: FontWeight.bold,
                       ),
                 ),
@@ -222,7 +222,6 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
     final torchLightState = ref.watch(torchLightControllerProvider);
     final remainingTime = ref.watch(therapyTimeProvider);
     final int countdown = ref.watch(countdownProvider);
-    final double imageWidth = MediaQuery.of(context).size.width * 0.85;
 
     final audioFileAsyncValue =
         ref.watch(audioFileProvider(widget.choreography.mediaName ?? ""));
@@ -251,24 +250,6 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          Container(
-                            width:
-                                imageWidth, // Set width to 50% of the screen width
-                            height:
-                                imageWidth, // Keep the height as is or adjust as needed
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: ChoreoImageProvider.getImageProvider(
-                                    widget.choreography, ref),
-                                fit: BoxFit.cover,
-                                colorFilter: ColorFilter.mode(
-                                  Colors.black.withOpacity(0.5),
-                                  BlendMode.darken,
-                                ),
-                              ),
-                            ),
-                          ),
                           if (countdown > 0) ...[
                             Align(
                               alignment: Alignment.bottomCenter,
@@ -295,7 +276,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                     widget.choreography.author!.isNotEmpty) ...[
                   AuthorText(author: widget.choreography.author ?? '')
                 ],
-                if (!torchLightState.isAvailable) ...[
+                if (!torchLightState.isAvailable && false) ...[
                   const Center(
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 40.0),
@@ -304,7 +285,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                     ),
                   )
                 ],
-                if (torchLightState.isAvailable) ...[
+                if (torchLightState.isAvailable || true) ...[
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Row(

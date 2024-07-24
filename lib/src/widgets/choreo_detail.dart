@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:maya/src/models/choreo.dart';
+import 'package:maya/src/widgets/choreo_image.dart';
 import 'package:maya/src/widgets/strobo_therapy.dart';
 
 class ChoreoDetailsScreen extends ConsumerStatefulWidget {
@@ -21,6 +22,7 @@ class _ChoreoDetailsScreenState extends ConsumerState<ChoreoDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final double imageWidth = MediaQuery.of(context).size.width * 0.85;
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark,
         child: Scaffold(
@@ -48,6 +50,24 @@ class _ChoreoDetailsScreenState extends ConsumerState<ChoreoDetailsScreen> {
                 mainAxisSize: MainAxisSize.min, // Aligns towards the bottom
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Center(
+                      child: Container(
+                    width: imageWidth, // Set width to 50% of the screen width
+                    height:
+                        imageWidth, // Keep the height as is or adjust as needed
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: ChoreoImageProvider.getImageProvider(
+                            widget.choreo, ref),
+                        fit: BoxFit.cover,
+                        colorFilter: ColorFilter.mode(
+                          Colors.black.withOpacity(0.5),
+                          BlendMode.darken,
+                        ),
+                      ),
+                    ),
+                  )),
                   StroboTherapyWidget(
                     choreography: widget.choreo,
                   )

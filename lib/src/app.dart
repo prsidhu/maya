@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:maya/src/config/theme/base_dark_them.dart';
+import 'package:maya/src/config/theme/gray_theme.dart';
 import 'package:maya/src/screens/splash.dart';
 
 import 'sample_feature/sample_item_details_view.dart';
@@ -58,8 +58,8 @@ class MyApp extends StatelessWidget {
           // Define a light and dark color theme. Then, read the user's
           // preferred ThemeMode (light, dark, or system default) from the
           // SettingsController to display the correct theme.
-          theme: darkTheme,
-          darkTheme: darkTheme,
+          theme: grayTheme,
+          darkTheme: grayTheme,
           themeMode: settingsController.themeMode,
 
           // Define a function to handle named routes in order to support

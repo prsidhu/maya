@@ -18,7 +18,7 @@ class MediaText extends StatelessWidget {
           child: Icon(
             FontAwesomeIcons.music,
             size: 10.0,
-            color: Theme.of(context).colorScheme.primary,
+            color: Theme.of(context).colorScheme.tertiary,
           ),
         ),
         Text(mediaName,
@@ -26,7 +26,7 @@ class MediaText extends StatelessWidget {
                 Theme.of(context)
                     .textTheme
                     .labelSmall
-                    ?.copyWith(color: Theme.of(context).colorScheme.primary))
+                    ?.copyWith(color: Theme.of(context).colorScheme.tertiary))
       ],
     );
   }

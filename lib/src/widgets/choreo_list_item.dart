@@ -76,7 +76,7 @@ class ChoreoListItem extends ConsumerWidget {
                     left: 8.0, right: 16.0, top: 8.0, bottom: 8.0),
                 child: Text(countdownFormatDuration(choreo.totalDuration ?? 0),
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.secondary)),
+                        color: Theme.of(context).colorScheme.primary)),
               )
             ],
           ),

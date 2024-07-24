@@ -16,7 +16,7 @@ class PrimaryTitle extends StatelessWidget {
       text,
       style: style ??
           Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.onSurface,
                 fontWeight: FontWeight.w500,
               ),
     );

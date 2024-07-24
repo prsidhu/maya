@@ -44,11 +44,11 @@ class GoalSegmentButton extends ConsumerWidget {
                   if (selected == segment) {
                     return Theme.of(context)
                         .colorScheme
-                        .onPrimary; // Selected text color
+                        .surfaceDim; // Selected text color
                   }
                   return Theme.of(context)
                       .colorScheme
-                      .primary; // Unselected text color
+                      .tertiary; // Unselected text color
                 },
               ),
               minimumSize: WidgetStateProperty.all<Size>(
