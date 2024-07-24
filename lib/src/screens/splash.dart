@@ -14,6 +14,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   double _opacity = 1.0;
   String _errorMessage = '';
+  bool _isLoggedIn = true;
   @override
   void initState() {
     super.initState();
@@ -24,6 +25,10 @@ class _SplashScreenState extends State<SplashScreen> {
     Auth().authStateChanges.listen((User? user) {
       if (user != null) {
         _navigateToHome();
+      } else {
+        setState(() {
+          _isLoggedIn = false;
+        });
       }
     });
   }
@@ -95,25 +100,28 @@ class _SplashScreenState extends State<SplashScreen> {
                           ),
                         )),
                     const SizedBox(height: 84.0),
-                    ElevatedButton(
-                      onPressed: signInWithGoogle,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
+                    if (!_isLoggedIn)
+                      ElevatedButton(
+                        onPressed: signInWithGoogle,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 16.0, horizontal: 48.0),
                         ),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 16.0, horizontal: 48.0),
+                        child: Text('Sign in with Google',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                  fontWeight: FontWeight.bold,
+                                )),
                       ),
-                      child: Text('Sign in with Google',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                fontWeight: FontWeight.bold,
-                              )),
-                    ),
                     if (_errorMessage.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.only(top: 16.0),
