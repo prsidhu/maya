@@ -11,6 +11,7 @@ import 'package:maya/src/utils/stringUtils.dart';
 import 'package:maya/src/widgets/audio_player.dart';
 import 'package:maya/src/widgets/choreo_image.dart';
 import 'package:maya/src/widgets/text/author_text.dart';
+import 'package:maya/src/widgets/text/onboarding_text.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:maya/src/providers/therapy_time_provider.dart';
 
@@ -141,7 +142,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
   Widget _buildButton(BuildContext context, int countdown, remainingTime) {
     return Padding(
       padding: const EdgeInsets.only(
-          top: 50.0, bottom: 40.0, left: 40.0, right: 40.0),
+          top: 30.0, bottom: 40.0, left: 40.0, right: 40.0),
       child: Center(
         child: SizedBox(
           width: double.infinity, // Make the button full width
@@ -246,12 +247,24 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                 Center(
                   // Use Center widget to center the image container in the screen
                   child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 50.0),
-                      child: Stack(
-                        alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(vertical: 20.0),
+                      child: Column(
                         children: [
+                          Padding(
+                              padding: const EdgeInsets.only(bottom: 12.0),
+                              child: Text(
+                                widget.choreography.title,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineLarge
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                              )),
                           if (countdown > 0) ...[
-                            Align(
+                            Container(
+                              height:
+                                  140.0, // Set a fixed height that accommodates both widgets
                               alignment: Alignment.bottomCenter,
                               child: Text(
                                 '$countdown',
@@ -259,54 +272,34 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                                     Theme.of(context).textTheme.displayMedium,
                               ),
                             )
+                          ] else ...[
+                            Container(
+                              height: 140.0, // Same fixed height as above
+                              alignment: Alignment.bottomCenter,
+                              child: const OnboardingText(),
+                            )
                           ]
                         ],
                       )),
                 ),
-                Padding(
-                    padding: const EdgeInsets.only(bottom: 2.0),
-                    child: Text(
-                      widget.choreography.title,
-                      style:
-                          Theme.of(context).textTheme.headlineLarge?.copyWith(
-                                fontWeight: FontWeight.w500,
-                              ),
-                    )),
-                if (widget.choreography.author != null &&
-                    widget.choreography.author!.isNotEmpty) ...[
-                  AuthorText(author: widget.choreography.author ?? '')
-                ],
-                if (!torchLightState.isAvailable && false) ...[
-                  const Center(
+                // if (widget.choreography.author != null &&
+                //     widget.choreography.author!.isNotEmpty) ...[
+                //   AuthorText(author: widget.choreography.author ?? '')
+                // ],
+                if (!torchLightState.isAvailable) ...[
+                  Center(
                     child: Padding(
                       padding: EdgeInsets.symmetric(vertical: 40.0),
-                      child:
-                          Text('Torch light is not available on this device.'),
+                      child: Text(
+                        'Torch light is not available on this device.',
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                              color: Colors.red,
+                            ),
+                      ),
                     ),
                   )
                 ],
-                if (torchLightState.isAvailable || true) ...[
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(FontAwesomeIcons.music,
-                            size: 12.0,
-                            color: Theme.of(context).colorScheme.primary),
-                        const SizedBox(width: 8.0),
-                        Text(
-                          widget.choreography.mediaName ?? 'Media unavailable',
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelMedium
-                              ?.copyWith(
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                        ),
-                      ],
-                    ),
-                  ),
+                if (torchLightState.isAvailable) ...[
                   _buildButton(context, countdown, remainingTime),
                   if (url.isNotEmpty)
                     AudioPlayerWidget(filePath: url, isPlaying: isPlaying)

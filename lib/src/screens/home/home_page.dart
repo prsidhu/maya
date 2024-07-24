@@ -8,6 +8,7 @@ import 'package:maya/src/providers/goal_segment_provider.dart';
 import 'package:maya/src/widgets/choreo_detail.dart';
 import 'package:maya/src/widgets/choreo_list_item.dart';
 import 'package:maya/src/widgets/goalSegment/goal_segment_widget.dart';
+import 'package:maya/src/widgets/maya_app_bar.dart';
 import 'package:maya/src/widgets/text/logo_text.dart';
 import 'package:maya/src/widgets/text/primary_title.dart';
 
@@ -67,10 +68,7 @@ class _HomePageState extends ConsumerState<HomePage>
     }
 
     return Scaffold(
-      appBar: AppBar(
-          leading:
-              Image.asset('assets/images/maya_logo.png', fit: BoxFit.fitWidth),
-          title: const LogoText()),
+      appBar: MayaAppBar(),
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 1000),
         child: selectedGoalSegment == null

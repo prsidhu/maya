@@ -10,7 +10,7 @@ final ThemeData grayTheme = ThemeData(
     tertiary: Color(0xFF555555), // Background Color
     surface: Color(0xFF5E5E5E), // Background Highlight Color
     surfaceDim: Color(0xFF222222),
-    onPrimary: Color(0xFFFFFFFF), // Text/icon color on primary color
+    onPrimary: Color(0xFF222222), // Text/icon color on primary color
     onSecondary: Color(0xFFFFFFFF), // Text/icon color on secondary color
     onSurface: Color(0xFF333333), // Text/icon color on background color
   ),
