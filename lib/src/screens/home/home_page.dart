@@ -151,18 +151,33 @@ class _HomePageState extends ConsumerState<HomePage>
   }
 
   Widget buildGoalHeader() {
-    return const Column(
+    return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        GoalSegmentWidget(),
-        Padding(
+        buildHeaderText(),
+        const GoalSegmentWidget(),
+        const Padding(
           padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
           child: PrimaryTitle(
             text: "Today's Therapies",
           ),
         ),
       ],
+    );
+  }
+
+  Padding buildHeaderText() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+      child: Text(
+        "Stroboscopic light therapies use specially designed choreographies of flickering light to cleanse, refresh and rejuvenate your mind.",
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+              height: 1.8,
+            ),
+      ),
     );
   }
 }
