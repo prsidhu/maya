@@ -9,8 +9,8 @@ import 'package:maya/src/widgets/choreo_detail.dart';
 import 'package:maya/src/widgets/choreo_list_item.dart';
 import 'package:maya/src/widgets/goalSegment/goal_segment_widget.dart';
 import 'package:maya/src/widgets/maya_app_bar.dart';
-import 'package:maya/src/widgets/text/logo_text.dart';
 import 'package:maya/src/widgets/text/primary_title.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -22,26 +22,15 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage>
     with SingleTickerProviderStateMixin {
   GoalSegment? selectedGoalSegment;
-  late AnimationController _animationController;
-  late Animation<double> _animation;
-  bool _animationTriggered = false;
 
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-    _animation = Tween(begin: 0.0, end: -1.0).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    checkFirstTimeOpen();
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
     super.dispose();
   }
 
@@ -54,17 +43,6 @@ class _HomePageState extends ConsumerState<HomePage>
       setState(() {
         selectedGoalSegment = selected;
       });
-
-      if (!_animationTriggered) {
-        // Step 3: Conditionally trigger animation
-        _animationController.forward().then((value) {
-          if (mounted) {
-            _animationController.reset();
-            _animationTriggered =
-                true; // Step 2: Update the flag after animation
-          }
-        });
-      }
     }
 
     return Scaffold(
@@ -179,5 +157,41 @@ class _HomePageState extends ConsumerState<HomePage>
             ),
       ),
     );
+  }
+
+  Future<void> checkFirstTimeOpen() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
+
+    if (isFirstTime) {
+      print("First time opening the app");
+      // Show toast
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              "Warning: Do not use this app if you have epilepsy or are prone to seizures.",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+            ),
+            duration:
+                const Duration(days: 365), // Effectively makes it persistent
+            action: SnackBarAction(
+              label: 'Dismiss',
+              onPressed: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
+              textColor: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        );
+      });
+
+      // Set the flag to false
+      await prefs.setBool('isFirstTime', false);
+    }
   }
 }
