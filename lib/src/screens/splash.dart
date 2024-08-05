@@ -94,7 +94,7 @@ class _SplashScreenState extends State<SplashScreen> {
                           blendMode: BlendMode
                               .srcIn, // This blend mode applies the shader to the text color
                           child: Text(
-                            'Psychedelic light therapies for sleep & meditation',
+                            'Stroboscopic light therapies',
                             style: Theme.of(context).textTheme.headlineSmall,
                             textAlign: TextAlign.center,
                           ),
