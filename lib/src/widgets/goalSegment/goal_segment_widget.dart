@@ -14,7 +14,7 @@ class GoalSegmentWidget extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
             child: PrimaryTitle(
-              text: 'Choose your goal',
+              text: 'Choose your duration',
             ),
           ),
           GoalSegmentButton()
