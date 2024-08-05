@@ -68,30 +68,45 @@ class _HomePageState extends ConsumerState<HomePage>
     }
 
     return Scaffold(
-      appBar: MayaAppBar(),
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 1000),
-        child: selectedGoalSegment == null
-            ? const Center(child: GoalSegmentWidget())
-            : AnimatedBuilder(
-                animation: _animationController,
-                builder: (context, child) {
-                  return Transform.translate(
-                    offset: Offset(0.0, _animation.value * 200),
-                    child: child,
-                  );
-                },
-                child: CustomScrollView(
-                  key: ValueKey(selectedGoalSegment),
-                  slivers: <Widget>[
-                    SliverPersistentHeader(
-                      delegate: _StickyGoalSegmentHeader(selectedGoalSegment!),
-                      pinned: true,
-                    ),
-                    ..._buildChoreoList(choreoAsyncValue),
-                  ],
-                ),
+      appBar: MayaAppBar(), // Use MayaAppBar as the default app bar
+      body: Column(
+        children: [
+          buildGoalHeader(), // Add the sticky goal segment header
+          Expanded(
+            child: choreoAsyncValue.when(
+              data: (List<Choreo> choreos) {
+                final filteredChoreos = choreos
+                    .where((choreo) =>
+                        choreo.segments.contains(selectedGoalSegment?.name))
+                    .toList();
+                return ListView.builder(
+                  itemCount: filteredChoreos.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final Choreo choreo = filteredChoreos[index];
+                    return ChoreoListItem(
+                      choreo: choreo,
+                      onTap: () {
+                        Events().choreoClickedEvent(choreo.id, choreo.title);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ChoreoDetailsScreen(choreo: choreo)),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+              error: (err, stack) => Center(
+                child: Text('Error: $err'),
               ),
+              loading: () => const Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -134,16 +149,8 @@ class _HomePageState extends ConsumerState<HomePage>
       ),
     ];
   }
-}
 
-class _StickyGoalSegmentHeader extends SliverPersistentHeaderDelegate {
-  final GoalSegment goalSegment;
-
-  _StickyGoalSegmentHeader(this.goalSegment);
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget buildGoalHeader() {
     return const Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,14 +165,4 @@ class _StickyGoalSegmentHeader extends SliverPersistentHeaderDelegate {
       ],
     );
   }
-
-  @override
-  double get maxExtent => 198;
-
-  @override
-  double get minExtent => 198;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
-      true;
 }
