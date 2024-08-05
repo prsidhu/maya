@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:maya/src/config/events.dart';
 import 'package:maya/src/models/choreo.dart';
 import 'package:maya/src/providers/audioFileProvider.dart';
@@ -9,8 +8,6 @@ import 'package:maya/src/providers/countdown.dart';
 import 'package:maya/src/providers/torch_light_controller.dart';
 import 'package:maya/src/utils/stringUtils.dart';
 import 'package:maya/src/widgets/audio_player.dart';
-import 'package:maya/src/widgets/choreo_image.dart';
-import 'package:maya/src/widgets/text/author_text.dart';
 import 'package:maya/src/widgets/text/onboarding_text.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:maya/src/providers/therapy_time_provider.dart';

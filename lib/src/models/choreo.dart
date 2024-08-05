@@ -1,25 +1,29 @@
 class Choreo {
-  final String id;
-  final String title;
-  final List<Sequence> sequence;
-  final List<String> segments;
-  final String? mediaName;
-  final String? imageName;
-  final int? totalDuration;
   final String? author;
+  final String? description;
+  final String id;
+  final String? imageName;
+  final String? mediaName;
+  final List<String> segments;
+  final List<Sequence> sequence;
+  final int? totalDuration;
+  final String title;
 
-  Choreo(
-      {required this.id,
-      required this.title,
-      required this.sequence,
-      required this.segments,
-      this.mediaName = '',
-      this.imageName = '',
-      this.totalDuration = 0,
-      this.author = ''});
+  Choreo({
+    required this.id,
+    required this.title,
+    required this.sequence,
+    required this.segments,
+    this.author = '',
+    this.description = '',
+    this.imageName = '',
+    this.mediaName = '',
+    this.totalDuration = 0,
+  });
 
   Choreo.fromMap(Map<String, dynamic> data, this.id)
       : author = data['author'] ?? '',
+        description = data['description'] ?? '',
         title = data['title'],
         mediaName = data['media_name'],
         imageName = data['image_name'],

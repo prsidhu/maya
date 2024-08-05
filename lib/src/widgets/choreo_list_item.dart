@@ -1,85 +1,102 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:maya/src/models/choreo.dart';
-import 'package:maya/src/utils/stringUtils.dart';
 import 'package:maya/src/widgets/choreo_image.dart';
-import 'package:maya/src/widgets/text/author_text.dart';
-import 'package:maya/src/widgets/text/media_text.dart';
 
 class ChoreoListItem extends ConsumerWidget {
   final Choreo choreo;
-  final onTap;
+  final VoidCallback onTap;
 
   const ChoreoListItem({super.key, required this.choreo, required this.onTap});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: Container(
-        height: 90, // Define a fixed height for consistency
+        height: 90,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceDim,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.surface,
+            width: 1.0,
+          ),
         ),
         child: InkWell(
           onTap: onTap,
           child: Row(
             children: [
-              ClipRRect(
-                borderRadius: const BorderRadiusDirectional.only(
-                    topStart: Radius.circular(10.0),
-                    bottomStart: Radius.circular(10.0)),
-                child: Image(
-                  width: 100, // Define a width for the image
-                  height:
-                      100, // Use the same height as the container to fill the space
-                  fit: BoxFit.cover,
-                  image: ChoreoImageProvider.getImageProvider(choreo, ref),
-                ),
-              ),
+              _ChoreoImage(choreo: choreo, ref: ref),
               const SizedBox(width: 10),
-              Expanded(
-                flex: 3,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        choreo.title,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontWeight: FontWeight.w700,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                      ),
-                      if (choreo.author != null &&
-                          choreo.author!.isNotEmpty) ...[
-                        AuthorText(
-                          author: choreo.author!,
-                          padding: const EdgeInsets.only(
-                              bottom: 6.0, left: 2.0, top: 4.0),
-                          style: Theme.of(context).textTheme.labelSmall,
-                        ),
-                      ],
-                      if (choreo.mediaName != null &&
-                          choreo.mediaName!.isNotEmpty) ...[
-                        MediaText(mediaName: choreo.mediaName ?? ''),
-                      ],
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 8.0, right: 16.0, top: 8.0, bottom: 8.0),
-                child: Text(countdownFormatDuration(choreo.totalDuration ?? 0),
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.primary)),
-              )
+              _ChoreoDetails(choreo: choreo),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ChoreoImage extends StatelessWidget {
+  final Choreo choreo;
+  final WidgetRef ref;
+
+  const _ChoreoImage({required this.choreo, required this.ref});
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: const BorderRadiusDirectional.only(
+        topStart: Radius.circular(10.0),
+        bottomStart: Radius.circular(10.0),
+      ),
+      child: Image(
+        width: 100,
+        height: 100,
+        fit: BoxFit.cover,
+        image: ChoreoImageProvider.getImageProvider(choreo, ref),
+      ),
+    );
+  }
+}
+
+class _ChoreoDetails extends StatelessWidget {
+  final Choreo choreo;
+
+  const _ChoreoDetails({required this.choreo});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: 3,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+                padding: const EdgeInsets.only(bottom: 4.0),
+                child: Text(
+                  choreo.title,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                )),
+            if (choreo.description != null && choreo.description!.isNotEmpty ||
+                true)
+              Text(
+                choreo.description ??
+                    'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    fontWeight: FontWeight.w400),
+              ),
+          ],
         ),
       ),
     );
