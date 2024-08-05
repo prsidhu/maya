@@ -7,6 +7,16 @@ import 'package:maya/src/providers/goal_segment_provider.dart';
 class GoalSegmentButton extends ConsumerWidget {
   const GoalSegmentButton({super.key});
 
+  String getGoalText(String segment) {
+    const Map<String, String> goalText = {
+      "two": "2 min",
+      "five": "5 min",
+      "ten": "10 min",
+    };
+    String text = segment.split('.').last;
+    return goalText[text]!;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final GoalSegment? selected = ref.watch(goalSegmentProvider);
@@ -14,8 +24,7 @@ class GoalSegmentButton extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: GoalSegment.values.map((segment) {
         // Capitalize the first letter of the button text
-        String buttonText = segment.toString().split('.').last;
-        buttonText = buttonText[0].toUpperCase() + buttonText.substring(1);
+        String buttonText = getGoalText(segment.toString());
 
         return Padding(
           padding: const EdgeInsets.all(8.0),

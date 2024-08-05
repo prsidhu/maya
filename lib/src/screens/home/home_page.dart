@@ -164,7 +164,6 @@ class _HomePageState extends ConsumerState<HomePage>
     bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
 
     if (isFirstTime) {
-      print("First time opening the app");
       // Show toast
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ScaffoldMessenger.of(context).showSnackBar(
