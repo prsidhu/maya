@@ -11,7 +11,7 @@ class OnboardingText extends StatelessWidget {
         Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             child: Text(
-              '(best experienced with earphones)',
+              '(best with earphones)',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.secondary,
                   ),
@@ -19,18 +19,18 @@ class OnboardingText extends StatelessWidget {
         Padding(
             padding: const EdgeInsets.symmetric(vertical: 12.0),
             child: Text(
-              'Once you start, please turn your phone and hold the camera flash 6 to 10 inches in front of your face.',
+              'Once you start, please turn your phone and hold the camera flash 8 to 12 inches in front of your face.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Theme.of(context).colorScheme.secondary,
                   ),
             )),
         Padding(
-            padding: const EdgeInsets.only(top: 4.0),
+            padding: const EdgeInsets.only(top: 8.0),
             child: Text(
               'Then, close your eyes and experience the magic!',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.tertiary,
-                  ),
+                  color: Theme.of(context).colorScheme.primary.withAlpha(200),
+                  fontWeight: FontWeight.w600),
             )),
       ],
     ));

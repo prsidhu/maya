@@ -23,8 +23,6 @@ class _ChoreoDetailsScreenState extends ConsumerState<ChoreoDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final double imageWidth = MediaQuery.of(context).size.width * 0.85;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final halfScreenHeight = screenHeight * 0.5;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark,
@@ -32,6 +30,8 @@ class _ChoreoDetailsScreenState extends ConsumerState<ChoreoDetailsScreen> {
           extendBodyBehindAppBar: false,
           appBar: AppBar(
             title: Text(widget.choreo.title,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     )),
