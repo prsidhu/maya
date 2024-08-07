@@ -15,7 +15,8 @@ final ThemeData grayTheme = ThemeData(
     onSurface: Color(0xFF333333), // Text/icon color on background color
   ),
   scaffoldBackgroundColor: const Color(0xFF121212), // Background Color
-  cardColor: const Color(0xFF1E1E1E), // Background Highlight Color
+  cardColor:
+      const Color.fromARGB(255, 24, 24, 24), // Background Highlight Color
   dividerColor: const Color(0xFF424242), // Border Color
   textTheme: const TextTheme(
     displayLarge: TextStyle(

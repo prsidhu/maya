@@ -1,1 +1,1 @@
-enum GoalSegment { sleep, meditate, trance }
+enum GoalSegment { two, five, ten }
