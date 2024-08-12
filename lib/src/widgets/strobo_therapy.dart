@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:maya/src/config/events.dart';
@@ -26,11 +27,13 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
   bool isTorchOn = false;
   int timerFirings = 0;
   bool isPlaying = false;
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   void startTherapy() async {
     // Reset any ongoing therapy
     stopTherapy();
     Wakelock.enable(); // Enable wakelock to keep the screen on
+    _playDing();
     Events().startTherapyEvent(widget.choreography.id,
         widget.choreography.title, widget.choreography.totalDuration ?? 0);
     final TherapyTimeNotifier therapyTimer =
@@ -133,7 +136,10 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
     isTorchOn = !isTorchOn;
   }
 
-  void stopTherapy() {
+  void stopTherapy({bool manuallyStopped = false}) {
+    if (manuallyStopped) {
+      _playDing();
+    }
     _timer?.cancel();
     ref.read(torchLightControllerProvider.notifier).disableTorch();
     ref.read(therapyTimeProvider.notifier).state =
@@ -141,6 +147,10 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
     ref.read(countdownProvider.notifier).reset(); // Reset the countdown
     isPlaying = false;
     Wakelock.disable(); // Allow the screen to turn off
+  }
+
+  void _playDing() async {
+    await _audioPlayer.play(AssetSource('assets/audio/ding.mp3'));
   }
 
   int calculateTotalDuration(List<Sequence> sequence) {
@@ -171,7 +181,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                     if (isPlaying) {
                       Events().stopTherapyEvent(widget.choreography.id,
                           widget.choreography.title, remainingTime);
-                      stopTherapy();
+                      stopTherapy(manuallyStopped: true);
                     } else {
                       Events().startTherapyEvent(widget.choreography.id,
                           widget.choreography.title, remainingTime);
