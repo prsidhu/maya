@@ -52,5 +52,6 @@ flutter:
 
   assets:
     # Add assets from the images directory to the application.
+    - assets/audio/ding.mp3
     - assets/images/
     - .env

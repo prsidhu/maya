@@ -31,9 +31,8 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
 
   void startTherapy() async {
     // Reset any ongoing therapy
-    stopTherapy();
+    stopTherapy(avoidDing: true);
     Wakelock.enable(); // Enable wakelock to keep the screen on
-    _playDing();
     Events().startTherapyEvent(widget.choreography.id,
         widget.choreography.title, widget.choreography.totalDuration ?? 0);
     final TherapyTimeNotifier therapyTimer =
@@ -56,6 +55,8 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
     while (countdown.state > 0) {
       await Future.delayed(const Duration(seconds: 1));
     }
+
+    _playDing();
 
     int choreographyIndex = 0;
     isPlaying = true;
@@ -88,13 +89,18 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
       // Turn off the flashlight if frequency is 0
       disableTorch();
       // Continue to the next step after the current step's duration
-      _timer = Timer(Duration(seconds: currentStep.duration), () {
-        _startStep(
-          ref: ref,
-          enableTorch: enableTorch,
-          disableTorch: disableTorch,
-          choreographyIndex: choreographyIndex + 1,
-        );
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        currentStepTimeRemaining--;
+        ref.read(therapyTimeProvider.notifier).decrement();
+        if (currentStepTimeRemaining <= 0) {
+          _timer?.cancel();
+          _startStep(
+            ref: ref,
+            enableTorch: enableTorch,
+            disableTorch: disableTorch,
+            choreographyIndex: choreographyIndex + 1,
+          );
+        }
       });
       return;
     }
@@ -136,8 +142,8 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
     isTorchOn = !isTorchOn;
   }
 
-  void stopTherapy({bool manuallyStopped = false}) {
-    if (manuallyStopped) {
+  void stopTherapy({bool avoidDing = false}) {
+    if (!avoidDing) {
       _playDing();
     }
     _timer?.cancel();
@@ -150,7 +156,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
   }
 
   void _playDing() async {
-    await _audioPlayer.play(AssetSource('assets/audio/ding.mp3'));
+    await _audioPlayer.play(AssetSource('audio/ding.mp3'));
   }
 
   int calculateTotalDuration(List<Sequence> sequence) {
@@ -181,7 +187,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                     if (isPlaying) {
                       Events().stopTherapyEvent(widget.choreography.id,
                           widget.choreography.title, remainingTime);
-                      stopTherapy(manuallyStopped: true);
+                      stopTherapy(avoidDing: true);
                     } else {
                       Events().startTherapyEvent(widget.choreography.id,
                           widget.choreography.title, remainingTime);
