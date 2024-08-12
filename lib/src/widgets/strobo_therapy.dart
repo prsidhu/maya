@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:maya/src/config/events.dart';
@@ -26,10 +27,11 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
   bool isTorchOn = false;
   int timerFirings = 0;
   bool isPlaying = false;
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   void startTherapy() async {
     // Reset any ongoing therapy
-    stopTherapy();
+    stopTherapy(avoidDing: true);
     Wakelock.enable(); // Enable wakelock to keep the screen on
     Events().startTherapyEvent(widget.choreography.id,
         widget.choreography.title, widget.choreography.totalDuration ?? 0);
@@ -53,6 +55,8 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
     while (countdown.state > 0) {
       await Future.delayed(const Duration(seconds: 1));
     }
+
+    _playDing();
 
     int choreographyIndex = 0;
     isPlaying = true;
@@ -80,6 +84,27 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
         widget.choreography.sequence[choreographyIndex];
     int currentStepTimeRemaining = currentStep.duration;
     int frequency = currentStep.frequency;
+
+    if (frequency == 0) {
+      // Turn off the flashlight if frequency is 0
+      disableTorch();
+      // Continue to the next step after the current step's duration
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        currentStepTimeRemaining--;
+        ref.read(therapyTimeProvider.notifier).decrement();
+        if (currentStepTimeRemaining <= 0) {
+          _timer?.cancel();
+          _startStep(
+            ref: ref,
+            enableTorch: enableTorch,
+            disableTorch: disableTorch,
+            choreographyIndex: choreographyIndex + 1,
+          );
+        }
+      });
+      return;
+    }
+
     int halfPeriod = calculateHalfPeriod(frequency);
 
     _timer = Timer.periodic(Duration(milliseconds: halfPeriod), (timer) {
@@ -117,7 +142,10 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
     isTorchOn = !isTorchOn;
   }
 
-  void stopTherapy() {
+  void stopTherapy({bool avoidDing = false}) {
+    if (!avoidDing) {
+      _playDing();
+    }
     _timer?.cancel();
     ref.read(torchLightControllerProvider.notifier).disableTorch();
     ref.read(therapyTimeProvider.notifier).state =
@@ -125,6 +153,10 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
     ref.read(countdownProvider.notifier).reset(); // Reset the countdown
     isPlaying = false;
     Wakelock.disable(); // Allow the screen to turn off
+  }
+
+  void _playDing() async {
+    await _audioPlayer.play(AssetSource('audio/ding.mp3'));
   }
 
   int calculateTotalDuration(List<Sequence> sequence) {
@@ -155,7 +187,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                     if (isPlaying) {
                       Events().stopTherapyEvent(widget.choreography.id,
                           widget.choreography.title, remainingTime);
-                      stopTherapy();
+                      stopTherapy(avoidDing: true);
                     } else {
                       Events().startTherapyEvent(widget.choreography.id,
                           widget.choreography.title, remainingTime);
@@ -287,7 +319,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                 if (!torchLightState.isAvailable) ...[
                   Center(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 40.0),
+                      padding: const EdgeInsets.symmetric(vertical: 40.0),
                       child: Text(
                         'Torch light is not available on this device.',
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
