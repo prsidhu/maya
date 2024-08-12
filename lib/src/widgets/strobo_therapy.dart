@@ -80,6 +80,22 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
         widget.choreography.sequence[choreographyIndex];
     int currentStepTimeRemaining = currentStep.duration;
     int frequency = currentStep.frequency;
+
+    if (frequency == 0) {
+      // Turn off the flashlight if frequency is 0
+      disableTorch();
+      // Continue to the next step after the current step's duration
+      _timer = Timer(Duration(seconds: currentStep.duration), () {
+        _startStep(
+          ref: ref,
+          enableTorch: enableTorch,
+          disableTorch: disableTorch,
+          choreographyIndex: choreographyIndex + 1,
+        );
+      });
+      return;
+    }
+
     int halfPeriod = calculateHalfPeriod(frequency);
 
     _timer = Timer.periodic(Duration(milliseconds: halfPeriod), (timer) {
@@ -287,7 +303,7 @@ class _StroboTherapyWidgetState extends ConsumerState<StroboTherapyWidget> {
                 if (!torchLightState.isAvailable) ...[
                   Center(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 40.0),
+                      padding: const EdgeInsets.symmetric(vertical: 40.0),
                       child: Text(
                         'Torch light is not available on this device.',
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
